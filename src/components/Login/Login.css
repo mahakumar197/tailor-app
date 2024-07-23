@@ -1,0 +1,33 @@
+.BG-login {
+  background-image: url("./bg.png");
+  height: 100vh;
+}
+.content-center {
+  padding: 2px;
+}
+.head-t1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 55px;
+  color: #1d1d21;
+}
+.head-t2 {
+  font-size: 40px;
+  letter-spacing: 13px;
+}
+.img-icon{
+        height: 6vh;
+    width: 31px;
+}
+.sub-text{
+    color: #020614;
+}
+.btnn-log{
+   width: 100%;
+    border-radius: 20px;
+    padding: 15px;
+    font-size: 20px;
+}
+.form-content{
+  margin-top: 60px;
+}

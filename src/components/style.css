@@ -1,0 +1,29 @@
+.BG-view {
+  background-image: url("./bg.png");
+  max-height: 500vh;
+}
+/* .btnn-view{
+     width: 100%;
+    border-radius: 20px;
+    padding: 15px;
+    font-size: 20px;
+    background-color: black;
+} */
+.img-logo{
+    height: 100px;
+}
+.btnn-arrow{
+    height: 50px;
+}
+.fixed-bottom-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  z-index: 1000;
+}
+
+.btn-block {
+  width: 100%;
+}
