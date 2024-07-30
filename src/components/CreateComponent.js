@@ -1,6 +1,4 @@
-// src/components/CreateComponent.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function CreateComponent() {
@@ -25,10 +23,9 @@ function CreateComponent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("https://sheetdb.io/api/v1/yxpmzp4gdv8ve")
-      .then((response) => {
-        const data = response.data;
+    fetch("https://sheetdb.io/api/v1/1pebjs86gedd7")
+      .then((response) => response.json())
+      .then((data) => {
         const maxId = data.reduce(
           (max, item) => Math.max(max, parseInt(item.id || 0)),
           0
@@ -65,9 +62,18 @@ function CreateComponent() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newData = { ...formData, id: nextId.toString() };
-    axios
-      .post("https://sheetdb.io/api/v1/yxpmzp4gdv8ve", { data: newData })
-      .then((response) => {
+
+    fetch("https://sheetdb.io/api/v1/1pebjs86gedd7", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data: [newData] }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
         navigate("/");
       })
       .catch((error) => {

@@ -8,6 +8,7 @@ import arrow from "./arrow.png";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -17,10 +18,10 @@ function Login() {
 
     if (username === hardcodedUsername && password === hardcodedPassword) {
       console.log("Login successful");
-      navigate("/"); // Navigate to the home page or desired route
+      navigate("/");
     } else {
       console.log("Invalid credentials");
-      // Handle invalid credentials (e.g., show an error message)
+      setErrorMessage("Invalid username or password");
     }
   };
 
@@ -33,7 +34,6 @@ function Login() {
             <p className="head-t2">HARDMAN</p>
             <img className="img-icon" src={star} alt="loading" />
           </div>
-
           <div className="form-content">
             <h1 className=" pb-4">Login</h1>
             <Form onSubmit={handleSubmit}>
@@ -55,8 +55,12 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
+              {errorMessage && (
+                <p className="text-danger mt-2">{errorMessage}</p>
+              )}
               <Button variant="dark" className="mt-5" type="submit">
                 Login
+                <img src={arrow} className="ms-2" alt="arrow" />
               </Button>
             </Form>
           </div>

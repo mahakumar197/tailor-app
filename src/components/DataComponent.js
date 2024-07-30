@@ -1,7 +1,9 @@
-// src/components/DataComponent.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import arrow from "./arrow.png";
+import { Link, useNavigate } from "react-router-dom";
 
 function DataComponent() {
   const { id } = useParams();
@@ -9,7 +11,7 @@ function DataComponent() {
 
   useEffect(() => {
     axios
-      .get(`https://sheetdb.io/api/v1/fl4471aq24iqh/search?id=${id}`)
+      .get(`https://sheetdb.io/api/v1/1pebjs86gedd7/search?id=${id}`)
       .then((response) => {
         setData(response.data[0]);
       })
@@ -41,6 +43,15 @@ function DataComponent() {
           )}
         </tbody>
       </table>
+      <Button
+        as={Link}
+        variant="dark"
+        to={`/`}
+        className="btnn-view d-flex me-2 W-25"
+      >
+        Back
+        <img src={arrow} className="ms-2" alt="arrow" />
+      </Button>
     </div>
   );
 }
