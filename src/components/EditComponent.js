@@ -1,20 +1,36 @@
-// src/components/EditComponent.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 function EditComponent() {
   const { id } = useParams();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    Name: "",
+    img: "",
+    Suit: "",
+    "Waist Coat": "",
+    Bandhi: "",
+    Indowestern: "",
+    shirt: "",
+    kurta: "",
+    shoulder: "",
+    "sleeve length": "",
+    chest: "",
+    waist: "",
+    seat: "",
+    "neck ": "",
+    bicep: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get(
-        `https://script.google.com/macros/s/AKfycbxTm1j8jpyWnzORqnu0KgVl9zlbBk2mrUgfI6BUJr8RIqBHazl1ZOCwK0_L0nz7OepM4w/exec?path=Sheet1&action=read/search?id=${id}`
-      )
+      .get(`https://sheetdb.io/api/v1/bdmyeklcafs0f/search?id=${id}`)
       .then((response) => {
-        setFormData(response.data[0]);
+        if (response.data.length > 0) {
+          setFormData(response.data[0]);
+        }
       })
       .catch((error) => {
         console.error("There was an error fetching the data!", error);
@@ -45,12 +61,26 @@ function EditComponent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .put(`https://sheetdb.io/api/v1/fl4471aq24iqh/id/${id}`, {
-        data: formData,
-      })
-      .then((response) => {
-        navigate("/");
+
+    fetch("https://sheetdb.io/api/v1/bdmyeklcafs0f/batch_update", {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: [
+          {
+            query: `id=${id}`,
+            ...formData,
+          },
+        ],
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        navigate(`/data/${id}`);
       })
       .catch((error) => {
         console.error("There was an error updating the entry!", error);

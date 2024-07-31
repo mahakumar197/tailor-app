@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import arrow from "./arrow.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function DataComponent() {
   const { id } = useParams();
@@ -11,7 +11,7 @@ function DataComponent() {
 
   useEffect(() => {
     axios
-      .get(`https://sheetdb.io/api/v1/1pebjs86gedd7/search?id=${id}`)
+      .get(`https://sheetdb.io/api/v1/bdmyeklcafs0f/search?id=${id}`)
       .then((response) => {
         setData(response.data[0]);
       })
@@ -21,33 +21,37 @@ function DataComponent() {
   }, [id]);
 
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container mt-5">
+        <h2>Loading...</h2>
+      </div>
+    );
   }
 
   return (
-    <div className="container">
-      <h1 className="my-4">{data.Name}</h1>
-      <img src={data.img} alt={data.Name} className="img-fluid mb-3" />
-      <table className="table table-striped">
-        <tbody>
-          {Object.keys(data).map(
-            (key) =>
-              key !== "id" &&
-              key !== "Name" &&
-              key !== "img" && (
-                <tr key={key}>
-                  <th>{key.replace("_", " ")}</th>
-                  <td>{data[key]}</td>
-                </tr>
-              )
+    <div className="container mt-5">
+      <div className="card">
+        <div className="align-content-center align-items-center  d-flex justify-content-center">
+          <img src={data.img} className="card-img-top" alt={data.Name} />
+        </div>
+
+        <div className="card-body">
+          {Object.keys(data).map((key) =>
+            key !== "id" && key !== "img" ? (
+              <tr key={key}>
+                <th>{key.replace("_", " ")}</th>
+                <td>{data[key] || "N/A"}</td>
+              </tr>
+            ) : null
           )}
-        </tbody>
-      </table>
+          {/* Add more fields as needed */}
+        </div>
+      </div>
       <Button
         as={Link}
         variant="dark"
         to={`/`}
-        className="btnn-view d-flex me-2 W-25"
+        className="btnn-view d-flex me-2 mt-3"
       >
         Back
         <img src={arrow} className="ms-2" alt="arrow" />

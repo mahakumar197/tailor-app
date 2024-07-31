@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import arrow from "./arrow.png";
+import logo from "./logo.png";
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 function CreateComponent() {
   const [formData, setFormData] = useState({
     Name: "",
+    phoneNumber: "",
+    address: "",
     img: "",
     Suit: "",
     "Waist Coat": "",
@@ -23,7 +28,7 @@ function CreateComponent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://sheetdb.io/api/v1/1pebjs86gedd7")
+    fetch("https://sheetdb.io/api/v1/fl4471aq24iqh")
       .then((response) => response.json())
       .then((data) => {
         const maxId = data.reduce(
@@ -63,7 +68,7 @@ function CreateComponent() {
     e.preventDefault();
     const newData = { ...formData, id: nextId.toString() };
 
-    fetch("https://sheetdb.io/api/v1/1pebjs86gedd7", {
+    fetch("https://sheetdb.io/api/v1/bdmyeklcafs0f", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -72,8 +77,7 @@ function CreateComponent() {
       body: JSON.stringify({ data: [newData] }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         navigate("/");
       })
       .catch((error) => {
@@ -85,35 +89,49 @@ function CreateComponent() {
     <div className="container">
       <h1 className="my-4">Create New Entry</h1>
       <form onSubmit={handleSubmit}>
-        {Object.keys(formData).map((key) =>
-          key !== "img" ? (
-            <div className="form-group my-2" key={key}>
-              <label>{key.replace("_", " ")}</label>
-              <input
-                type="text"
-                name={key}
-                className="form-control"
-                placeholder={key.replace("_", " ")}
-                value={formData[key]}
-                onChange={handleChange}
-              />
-            </div>
-          ) : (
-            <div className="form-group my-2" key={key}>
-              <label>{key.replace("_", " ")}</label>
-              <input
-                type="file"
-                name={key}
-                className="form-control"
-                accept="image/png, image/jpeg"
-                onChange={handleFileChange}
-              />
-            </div>
-          )
-        )}
+        <table className="table">
+          <tbody>
+            {Object.keys(formData).map((key) => (
+              <tr key={key}>
+                <td>
+                  <label>{key.replace("_", " ")}</label>
+                </td>
+                <td>
+                  {key !== "img" ? (
+                    <input
+                      type="text"
+                      name={key}
+                      className="form-control"
+                      placeholder={key.replace("_", " ")}
+                      value={formData[key]}
+                      onChange={handleChange}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      name={key}
+                      className="form-control"
+                      accept="image/png, image/jpeg"
+                      onChange={handleFileChange}
+                    />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <button type="submit" className="btn btn-primary mt-3">
           Save
         </button>
+        <Button
+          as={Link}
+          variant="dark"
+          to={`/`}
+          className="btnn-view d-flex me-2 mt-3"
+        >
+          Back
+          <img src={arrow} className="ms-2" alt="arrow" />
+        </Button>
       </form>
     </div>
   );

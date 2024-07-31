@@ -28,8 +28,8 @@ function Login() {
   return (
     <div className="container-fluid BG-login">
       <div className="container">
-        <div className="content-center">
-          <p className="head-t1 m-0">Welcome to</p>
+        <div className="content-center mt-5">
+          {/* <p className="head-t1 m-0">Welcome to</p> */}
           <div className="d-flex">
             <p className="head-t2">HARDMAN</p>
             <img className="img-icon" src={star} alt="loading" />
@@ -38,18 +38,20 @@ function Login() {
             <h1 className=" pb-4">Login</h1>
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formUsername" className="mt-4">
-                <Form.Label className="pb-2">Enter Number</Form.Label>
+                <Form.Label className="pb-2 fs-2">Enter Number</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter username"
+                  className="data-input"
+                  placeholder="Enter Number"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </Form.Group>
               <Form.Group controlId="formPassword" className="mt-4">
-                <Form.Label className="pb-2">Password</Form.Label>
+                <Form.Label className="pb-2 fs-2">Password</Form.Label>
                 <Form.Control
                   type="password"
+                  className="data-input"
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -58,7 +60,7 @@ function Login() {
               {errorMessage && (
                 <p className="text-danger mt-2">{errorMessage}</p>
               )}
-              <Button variant="dark" className="mt-5" type="submit">
+              <Button variant="dark" className="mt-5 btnn-log" type="submit">
                 Login
                 <img src={arrow} className="ms-2" alt="arrow" />
               </Button>

@@ -1,19 +1,27 @@
 .BG-view {
   background-image: url("./bg.png");
-  max-height: 500vh;
+  min-height: 100vh; /* Ensure it covers the entire viewport height */
+  background-size: cover; /* Cover the entire container */
+  background-repeat: no-repeat;
+  background-position: center center;
 }
-/* .btnn-view{
-     width: 100%;
-    border-radius: 20px;
-    padding: 15px;
-    font-size: 20px;
-    background-color: black;
-} */
-.img-logo{
-    height: 100px;
+
+/* Optional: Additional styling for inner container to handle overflow */
+.container {
+  overflow: auto;
+  padding: 20px;
 }
-.btnn-arrow{
-    height: 50px;
+
+.btnn-view {
+  width: 100%;
+
+  font-size: 20px !important;
+}
+.img-logo {
+  height: 100px;
+}
+.btnn-arrow {
+  height: 50px;
 }
 .fixed-bottom-btn {
   position: fixed;
@@ -26,4 +34,16 @@
 
 .btn-block {
   width: 100%;
+}
+.search-box{
+      height: 77px;
+    font-size: 30px !important;
+}
+.data-container{
+  margin-top: 7rem !important;
+}
+.btnn-create{
+  font-size: 30px !important;
+  padding: 10px !important;
+  font-weight: 600 !important;
 }

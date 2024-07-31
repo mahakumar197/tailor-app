@@ -18,7 +18,7 @@ function ViewComponent() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://sheetdb.io/api/v1/1pebjs86gedd7"
+          "https://sheetdb.io/api/v1/bdmyeklcafs0f"
         );
         setData(response.data);
         setFilteredData(response.data); // Initialize filtered data with full dataset
@@ -80,63 +80,63 @@ function ViewComponent() {
             <input
               type="text"
               placeholder="Search by name or mobile number"
-              className="form-control"
+              className="form-control search-box"
               value={searchTerm}
               onChange={handleSearchChange}
             />
           </div>
-          <div className="row">
+          <div className="row data-container">
             {filteredData.length > 0 ? (
               filteredData.map((item) => (
                 <div key={item.id} className="col-md-12 row mb-4">
-                  <div className="col-4">
+                  <div className="col-2">
                     <img
                       src={item.img}
                       alt={item.Name}
                       className="card-img-top"
-                      style={{ width: "80%", height: "150px" }}
                     />
                   </div>
-                  <div className="col-6 d-flex align-items-center row mt-5">
-                    <p className="card-title">{item.phoneNumber || "N/A"}</p>
-                    <h2 className="card-title">{item.Name}</h2>
-                    <span className="card-title">{item.address || "N/A"}</span>
+                  <div className="col-7 d-flex align-items-center row mb-5 ms-5">
+                    <h4>{item.phoneNumber || "N/A"}</h4>
+                    <h1>{item.Name}</h1>
+                    <h5>{item.address || "N/A"}</h5>
                   </div>
                   <div className="col-2 d-flex align-items-center">
                     <Button
                       as={Link}
                       variant="dark"
                       to={`/data/${item.id}`}
-                      className="btnn-view d-flex me-2"
+                      className="btnn-view d-flex me-2 w-75"
                     >
                       View
-                      <img src={arrow} className="ms-2" alt="arrow" />
+                      <img src={arrow} className="ms-3 w-25" alt="arrow" />
                     </Button>
-                    <Button
+                    {/* <Button
                       as={Link}
                       variant="warning"
                       to={`/edit/${item.id}`}
                       className="btn-sm"
                     >
                       Edit
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               ))
             ) : (
-              <p>No results found</p>
+              <h4>No results found</h4>
             )}
           </div>
         </div>
-        <div className="fixed-bottom-btn">
+        <div className="fixed-bottom-btn w-50">
           <Button
             variant="dark"
             onClick={() => navigate("/create")}
-            className="btn-block"
+            className="btn-block btnn-create"
           >
             Create New Customer
             <img src={arrow} className="ms-2" alt="arrow" />
           </Button>
+          
         </div>
       </div>
     </div>
