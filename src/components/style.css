@@ -1,10 +1,4 @@
-.BG-view {
-  background-image: url("./bg.png");
-  min-height: 100vh; /* Ensure it covers the entire viewport height */
-  background-size: cover; /* Cover the entire container */
-  background-repeat: no-repeat;
-  background-position: center center;
-}
+
 
 /* Optional: Additional styling for inner container to handle overflow */
 .container {
@@ -38,6 +32,7 @@
 .search-box{
       height: 77px;
     font-size: 30px !important;
+    border-radius: 46px !important;
 }
 .data-container{
   margin-top: 7rem !important;

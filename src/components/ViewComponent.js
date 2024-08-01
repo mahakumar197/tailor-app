@@ -66,7 +66,7 @@ function ViewComponent() {
   };
 
   return (
-    <div className="container-fluid BG-view">
+    
       <div className="container">
         <div className="d-flex justify-content-between pt-5">
           <img src={logo} className="img-logo" alt="Logo" />
@@ -139,7 +139,7 @@ function ViewComponent() {
           
         </div>
       </div>
-    </div>
+    // </div>
   );
 }
 
