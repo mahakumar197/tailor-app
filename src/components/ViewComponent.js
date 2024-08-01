@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import debounce from "lodash/debounce"; // Import debounce from lodash
+import debounce from "lodash/debounce";
 import "./style.css";
 import arrow from "./arrowBlack.png";
 import Heart from "./Heart.png";
@@ -13,7 +13,8 @@ function ViewComponent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [retryCount, setRetryCount] = useState(0);
-  const [timeout, setTimeout] = useState(null); // To store the timeout ID
+  const [timeoutId, setTimeoutId] = useState(null);
+  const [greeting, setGreeting] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,11 +24,11 @@ function ViewComponent() {
           "https://sheetdb.io/api/v1/bdmyeklcafs0f"
         );
         setData(response.data);
-        setFilteredData(response.data); // Initialize filtered data with full dataset
-        setRetryCount(0); // Reset retry count on success
+        setFilteredData(response.data);
+        setRetryCount(0);
       } catch (error) {
         if (error.response && error.response.status === 429) {
-          const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+          const delay = Math.pow(2, retryCount) * 1000;
           console.error(
             `Too many requests, retrying in ${delay / 1000} seconds...`
           );
@@ -42,7 +43,46 @@ function ViewComponent() {
     fetchData();
   }, [retryCount]);
 
-  // Debounced search input handler
+  useEffect(() => {
+    const updateGreeting = () => {
+      const hours = new Date().getHours();
+      if (hours < 12) {
+        setGreeting("Good Morning");
+      } else if (hours < 18) {
+        setGreeting("Good Afternoon");
+      } else {
+        setGreeting("Good Evening");
+      }
+    };
+
+    updateGreeting();
+
+    const handleUserActivity = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      const id = setTimeout(() => {
+        navigate("/login");
+      }, 5 * 60 * 1000); // 5 minutes
+      setTimeoutId(id);
+    };
+
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("keydown", handleUserActivity);
+    window.addEventListener("click", handleUserActivity);
+
+    handleUserActivity(); // Start the timer
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      window.removeEventListener("mousemove", handleUserActivity);
+      window.removeEventListener("keydown", handleUserActivity);
+      window.removeEventListener("click", handleUserActivity);
+    };
+  }, [timeoutId, navigate]);
+
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {
@@ -52,7 +92,7 @@ function ViewComponent() {
             item.phoneNumber.includes(value)
         );
         setFilteredData(results);
-      }, 300), // Adjust the debounce delay as needed
+      }, 300),
     [data]
   );
 
@@ -62,51 +102,10 @@ function ViewComponent() {
     debouncedSearch(value);
   };
 
-  const handleLogout = () => {
-    // Add logic to clear user session or token
-    navigate("/login");
-  };
-
-  useEffect(() => {
-    // Function to reset timeout
-    const resetTimeout = () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-      const newTimeout = setTimeout(() => {
-        handleLogout(); // Redirect to login after timeout
-      }, 5 * 60 * 1000); // 5 minutes
-      setTimeout(newTimeout);
-    };
-
-    // Reset the timeout on user activity
-    const handleActivity = () => {
-      resetTimeout();
-    };
-
-    // Attach event listeners for user activity
-    window.addEventListener("mousemove", handleActivity);
-    window.addEventListener("keydown", handleActivity);
-    window.addEventListener("click", handleActivity);
-
-    // Initialize timeout
-    resetTimeout();
-
-    // Clean up event listeners and timeout on component unmount
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-      window.removeEventListener("mousemove", handleActivity);
-      window.removeEventListener("keydown", handleActivity);
-      window.removeEventListener("click", handleActivity);
-    };
-  }, [timeout]);
-
   return (
     <div className="container pt-5">
       <div className="d-flex header-content justify-content-between">
-        <h1 className="header1-prop">Good Morning</h1>
+        <h1 className="header1-prop">{greeting}</h1>
         <div className="d-flex mt-5">
           <img src={Heart} className="me-3 img-heart" alt="fav" />
           <p className="show-fav">Show Favourites</p>
@@ -138,11 +137,7 @@ function ViewComponent() {
             filteredData.map((item) => (
               <div key={item.id} className="col-md-12 row mb-4">
                 <div className="col-2">
-                  <img
-                    src={item.img}
-                    alt={item.Name}
-                    className=" img-rounded"
-                  />
+                  <img src={item.img} alt={item.Name} className="img-rounded" />
                 </div>
                 <div className="col-7 d-flex align-items-center row mb-5 ms-5">
                   <h4>{item.phoneNumber || "N/A"}</h4>
@@ -158,14 +153,6 @@ function ViewComponent() {
                     View
                     <img src={arrow} className="ms-3 w-25" alt="arrow" />
                   </Button>
-                  {/* <Button
-                      as={Link}
-                      variant="warning"
-                      to={`/edit/${item.id}`}
-                      className="btn-sm"
-                    >
-                      Edit
-                    </Button> */}
                 </div>
               </div>
             ))

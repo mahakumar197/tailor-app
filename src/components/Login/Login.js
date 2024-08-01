@@ -18,7 +18,7 @@ function Login() {
 
     if (username === hardcodedUsername && password === hardcodedPassword) {
       console.log("Login successful");
-      navigate("/");
+      navigate("/"); // Redirect to home after successful login
     } else {
       console.log("Invalid credentials");
       setErrorMessage("Invalid username or password");
@@ -26,18 +26,15 @@ function Login() {
   };
 
   return (
-    // <div className="container-fluid BG-login">
     <div className="container">
       <div className="content-center mt-5">
-        {/* <p className="head-t1 m-0">Welcome to</p> */}
         <div className="d-flex justify-content-center">
           <img className="img-icon" src={logo} alt="Logo" />
         </div>
-        {/* <div className="form-content"> */}
 
         <Form onSubmit={handleSubmit}>
           <div className="form-content">
-            <h1 className=" pb-4 d-flex justify-content-center">Login</h1>
+            <h1 className="pb-4 d-flex justify-content-center">Login</h1>
             <Form.Group controlId="formUsername" className="mt-4">
               <Form.Label className="pb-2 fs-3 form-label-prop">
                 Enter Number
@@ -75,20 +72,16 @@ function Login() {
             Forgot Password?
           </p>
         </Form>
-        {/* </div> */}
         <div className="copyright fixed-bottom">
-          <h4>Version 0.1 </h4>
+          <h4>Version 0.1</h4>
           <div className="mt-3">
             <h5>
-              {" "}
-              Copyrights owned by <span className=" ms-3 head-t2">HARDMAN</span>
+              Copyrights owned by <span className="ms-3 head-t2">HARDMAN</span>
             </h5>
-          
           </div>
         </div>
       </div>
     </div>
-    // </div>
   );
 }
 
