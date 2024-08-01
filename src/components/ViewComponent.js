@@ -6,13 +6,14 @@ import debounce from "lodash/debounce"; // Import debounce from lodash
 import "./style.css";
 import arrow from "./arrowBlack.png";
 import Heart from "./Heart.png";
-import add from "./addbtn.png"
+import add from "./addbtn.png";
 
 function ViewComponent() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [retryCount, setRetryCount] = useState(0);
+  const [timeout, setTimeout] = useState(null); // To store the timeout ID
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,13 +67,49 @@ function ViewComponent() {
     navigate("/login");
   };
 
+  useEffect(() => {
+    // Function to reset timeout
+    const resetTimeout = () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      const newTimeout = setTimeout(() => {
+        handleLogout(); // Redirect to login after timeout
+      }, 5 * 60 * 1000); // 5 minutes
+      setTimeout(newTimeout);
+    };
+
+    // Reset the timeout on user activity
+    const handleActivity = () => {
+      resetTimeout();
+    };
+
+    // Attach event listeners for user activity
+    window.addEventListener("mousemove", handleActivity);
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("click", handleActivity);
+
+    // Initialize timeout
+    resetTimeout();
+
+    // Clean up event listeners and timeout on component unmount
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      window.removeEventListener("mousemove", handleActivity);
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("click", handleActivity);
+    };
+  }, [timeout]);
+
   return (
     <div className="container pt-5">
       <div className="d-flex header-content justify-content-between">
         <h1 className="header1-prop">Good Morning</h1>
         <div className="d-flex mt-5">
           <img src={Heart} className="me-3 img-heart" alt="fav" />
-          <p className="show-fav"> Show Favourites</p>
+          <p className="show-fav">Show Favourites</p>
         </div>
       </div>
       <div className="pt-4">
@@ -138,7 +175,6 @@ function ViewComponent() {
         </div>
       </div>
     </div>
-    // </div>
   );
 }
 
