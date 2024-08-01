@@ -15,7 +15,10 @@
     padding: 10px 20px !important;
     transition: background-color 0.3s, color 0.3s !important;
 }
-
+.btnn-back{
+  width: 13%;
+    border-radius: 45px !important;
+}
 .btnn-view:hover {
     background-color: black !important;
     color: white !important;
@@ -73,4 +76,16 @@
 }
 .header4-prop {
   margin-bottom: 80px;
+}
+.img-rounded{
+  border-radius: 100%;
+    border: 5px solid black !important;
+    width: 200px;
+}
+.img-height-arrow{
+  height: 48px;
+}
+.tab-props{
+  color: black;
+  font-size: 30px;
 }

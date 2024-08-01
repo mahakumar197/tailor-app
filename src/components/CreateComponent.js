@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import arrow from "./arrow.png";
-import logo from "./logo.png";
+import { Tab, Tabs, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import arrow from "./arrow.png";
+import logo from "./logo.png"; // Assuming you have this file
+
 function CreateComponent() {
   const [formData, setFormData] = useState({
     Name: "",
@@ -87,51 +88,144 @@ function CreateComponent() {
 
   return (
     <div className="container">
-      <h1 className="my-4">Create New Entry</h1>
-      <form onSubmit={handleSubmit}>
-        <table className="table">
-          <tbody>
-            {Object.keys(formData).map((key) => (
-              <tr key={key}>
-                <td>
-                  <label>{key.replace("_", " ")}</label>
-                </td>
-                <td>
-                  {key !== "img" ? (
-                    <input
-                      type="text"
-                      name={key}
-                      className="form-control"
-                      placeholder={key.replace("_", " ")}
-                      value={formData[key]}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <input
-                      type="file"
-                      name={key}
-                      className="form-control"
-                      accept="image/png, image/jpeg"
-                      onChange={handleFileChange}
-                    />
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button type="submit" className="btn btn-primary mt-3">
-          Save
-        </button>
+      <div className="d-flex justify-content-between">
+        <h1 className="my-4">Create New Entry</h1>
         <Button
           as={Link}
           variant="dark"
           to={`/`}
-          className="btnn-view d-flex me-2 mt-3"
+          className="btnn-back d-flex me-2 mt-5 fs-4"
         >
           Back
-          <img src={arrow} className="ms-2" alt="arrow" />
+          <img src={arrow} className="ms-4 img-height-arrow" alt="arrow" />
         </Button>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <Tabs defaultActiveKey="details" id="measurement-tabs" className="mb-3">
+          <Tab eventKey="details" className="tab-props" title="Personal Details">
+            <table className="table">
+              <tbody>
+                {["Name", "phoneNumber", "address"].map((key) => (
+                  <tr key={key}>
+                    <td>
+                      <label>{key.replace("_", " ")}</label>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={key}
+                        className="form-control"
+                        placeholder={key.replace("_", " ")}
+                        value={formData[key]}
+                        onChange={handleChange}
+                      />
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td>
+                    <label>Image</label>
+                  </td>
+                  <td>
+                    <input
+                      type="file"
+                      name="img"
+                      className="form-control"
+                      accept="image/*"
+                      capture="environment" // Opens the back camera on mobile devices
+                      onChange={handleFileChange}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </Tab>
+          <Tab eventKey="shirt" title="Shirt">
+            <table className="table">
+              <tbody>
+                {[
+                  "shirt",
+                  "kurta",
+                  "shoulder",
+                  "sleeve length",
+                  "chest",
+                  "waist",
+                  "seat",
+                  "neck",
+                  "bicep",
+                ].map((key) => (
+                  <tr key={key}>
+                    <td>
+                      <label>{key.replace("_", " ")}</label>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={key}
+                        className="form-control"
+                        placeholder={key.replace("_", " ")}
+                        value={formData[key]}
+                        onChange={handleChange}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Tab>
+          <Tab eventKey="suit" title="Suit">
+            <table className="table">
+              <tbody>
+                {["Suit", "Waist Coat", "Bandhi", "Indowestern"].map((key) => (
+                  <tr key={key}>
+                    <td>
+                      <label>{key.replace("_", " ")}</label>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={key}
+                        className="form-control"
+                        placeholder={key.replace("_", " ")}
+                        value={formData[key]}
+                        onChange={handleChange}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Tab>
+          <Tab eventKey="trouser"  title="Trouser">
+            <table className="table">
+              <tbody>
+                {["trouser", "waist", "seat", "length"].map((key) => (
+                  <tr key={key}>
+                    <td>
+                      <label>{key.replace("_", " ")}</label>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name={key}
+                        className="form-control"
+                        placeholder={key.replace("_", " ")}
+                        value={formData[key]}
+                        onChange={handleChange}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Tab>
+        </Tabs>
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary mt-3">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );

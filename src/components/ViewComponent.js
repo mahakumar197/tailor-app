@@ -104,7 +104,7 @@ function ViewComponent() {
                   <img
                     src={item.img}
                     alt={item.Name}
-                    className="card-img-top"
+                    className=" img-rounded"
                   />
                 </div>
                 <div className="col-7 d-flex align-items-center row mb-5 ms-5">
@@ -115,7 +115,6 @@ function ViewComponent() {
                 <div className="col-2 d-flex align-items-center">
                   <Button
                     as={Link}
-                   
                     to={`/data/${item.id}`}
                     className="btnn-view d-flex me-2 w-75 fs-4"
                   >

@@ -30,12 +30,17 @@ function DataComponent() {
 
   return (
     <div className="container mt-5">
-      <div className="card">
-        <div className="align-content-center align-items-center  d-flex justify-content-center">
-          <img src={data.img} className="card-img-top" alt={data.Name} />
+      <div>
+        <h1>Customer Details</h1>
+        <div className="d-flex flex-column align-items-center justify-content-center text-center">
+          <img src={data.img} alt={data.Name} className="img-rounded" />
+
+          <h4 className="mt-5 header3-prop">{data.phoneNumber || "N/A"}</h4>
+          <h1>{data.Name}</h1>
+          <h5 className="header3-prop">{data.address || "N/A"}</h5>
         </div>
 
-        <div className="card-body">
+        <div>
           {Object.keys(data).map((key) =>
             key !== "id" && key !== "img" ? (
               <tr key={key}>
