@@ -29,8 +29,15 @@ function CreateComponent() {
   const [nextId, setNextId] = useState(1);
   const navigate = useNavigate();
 
+   const [data, setData] = useState([]);
+   const SPREADSHEET_ID = "1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I";
+   const RANGE = "Measurement_data"; // Adjust the range as needed
+   const API_KEY = "AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ";
+
   useEffect(() => {
-    fetch("https://sheetdb.io/api/v1/fl4471aq24iqh")
+    fetch(
+      "https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ"
+    )
       .then((response) => response.json())
       .then((data) => {
         const maxId = data.reduce(
@@ -70,14 +77,17 @@ function CreateComponent() {
     e.preventDefault();
     const newData = { ...formData, id: nextId.toString() };
 
-    fetch("https://sheetdb.io/api/v1/bdmyeklcafs0f", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data: [newData] }),
-    })
+    fetch(
+      "https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: [newData] }),
+      }
+    )
       .then((response) => response.json())
       .then(() => {
         navigate("/");

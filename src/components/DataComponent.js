@@ -11,7 +11,9 @@ function DataComponent() {
 
   useEffect(() => {
     axios
-      .get(`https://sheetdb.io/api/v1/bdmyeklcafs0f/search?id=${id}`)
+      .get(
+        `https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ/search?id=${id}`
+      )
       .then((response) => {
         setData(response.data[0]);
       })
@@ -50,7 +52,7 @@ function DataComponent() {
         <h1>{data.Name}</h1>
         <h5 className="header3-prop">{data.address || "N/A"}</h5>
       </div>
-      <Tabs defaultActiveKey="personalDetails" id="data-tabs" className="mb-3">
+      <Tabs defaultActiveKey="shirt" id="data-tabs" className="mb-3">
         {data.comments && (
           <Tab eventKey="comments" title="Comments">
             <div className="mt-4">

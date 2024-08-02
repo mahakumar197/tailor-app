@@ -21,7 +21,7 @@ function ViewComponent() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://sheetdb.io/api/v1/bdmyeklcafs0f"
+          "https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ"
         );
         setData(response.data);
         setFilteredData(response.data);

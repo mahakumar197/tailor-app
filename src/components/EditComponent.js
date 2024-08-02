@@ -26,7 +26,9 @@ function EditComponent() {
 
   useEffect(() => {
     axios
-      .get(`https://sheetdb.io/api/v1/bdmyeklcafs0f/search?id=${id}`)
+      .get(
+        `https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ/search?id=${id}`
+      )
       .then((response) => {
         if (response.data.length > 0) {
           setFormData(response.data[0]);
