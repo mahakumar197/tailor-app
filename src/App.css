@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.App{
+  font-family: "Poppins", sans-serif;
+}
+
 .BG-view {
   background-image: url("./components/bg.png");
   min-height: 100vh; /* Ensure it covers the entire viewport height */

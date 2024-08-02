@@ -16,8 +16,9 @@
     transition: background-color 0.3s, color 0.3s !important;
 }
 .btnn-back{
-  width: 13%;
+ width: 13%;
     border-radius: 45px !important;
+    padding-left: 22px !important;
 }
 .btnn-view:hover {
     background-color: black !important;
@@ -77,10 +78,12 @@
 .header4-prop {
   margin-bottom: 80px;
 }
-.img-rounded{
-  border-radius: 100%;
-    border: 5px solid black !important;
-    width: 200px;
+.img-rounded{  
+  width: 200px; /* Set a fixed width or use a percentage if needed */
+  height: 200px; /* Make the height equal to the width for a perfect circle */
+  border-radius: 50%; /* Makes the image circular */
+  object-fit: cover; /* Ensures the image covers the area and maintains aspect ratio */
+  border: 5px solid black !important;
 }
 .img-height-arrow{
   height: 48px;
@@ -88,4 +91,56 @@
 .tab-props{
   color: black;
   font-size: 30px;
+}
+/* CreateComponent.css */
+
+
+.btnn-back {
+  display: flex;
+  align-items: center;
+}
+
+.img-height-arrow {
+  height: 20px;
+}
+
+.tab-props {
+  font-size: 1.25rem; /* Adjust font size for tab titles */
+}
+
+.form-control {
+  font-size: 1.1rem; /* Increase font size for input fields */
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.table label {
+  font-weight: bold;
+}
+
+.table input {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  width: 100%;
+}
+
+.table input:focus {
+  border-bottom: 2px solid #000;
+  box-shadow: none;
+}
+
+button[type="submit"] {
+  width: 100px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.label-props{
+  font-size: 30px;
+}
+.custom-tab-title .nav-link.active {
+  font-size: 40px; /* Font size for active tab title */
+  font-weight: bold;
 }

@@ -72,7 +72,7 @@ function Login() {
             Forgot Password?
           </p>
         </Form>
-        <div className="copyright fixed-bottom">
+        <div className="copyright">
           <h4>Version 0.1</h4>
           <div className="mt-3">
             <h5>

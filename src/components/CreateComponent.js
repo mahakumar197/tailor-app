@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tab, Tabs, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "./style.css"; // Import the custom CSS
 import arrow from "./arrow.png";
 import logo from "./logo.png"; // Assuming you have this file
 
@@ -89,7 +90,7 @@ function CreateComponent() {
   return (
     <div className="container">
       <div className="d-flex justify-content-between">
-        <h1 className="my-4">Create New Entry</h1>
+        <h1 className="my-4">Add New Customer</h1>
         <Button
           as={Link}
           variant="dark"
@@ -103,13 +104,19 @@ function CreateComponent() {
 
       <form onSubmit={handleSubmit}>
         <Tabs defaultActiveKey="details" id="measurement-tabs" className="mb-3">
-          <Tab eventKey="details" className="tab-props" title="Personal Details">
+          <Tab
+            eventKey="details"
+            className="tab-props custom-tab-title"
+            title="Personal Details"
+          >
             <table className="table">
               <tbody>
                 {["Name", "phoneNumber", "address"].map((key) => (
                   <tr key={key}>
                     <td>
-                      <label>{key.replace("_", " ")}</label>
+                      <label className="label-props">
+                        {key.replace("_", " ")}
+                      </label>
                     </td>
                     <td>
                       <input
@@ -125,7 +132,7 @@ function CreateComponent() {
                 ))}
                 <tr>
                   <td>
-                    <label>Image</label>
+                    <label className="label-props">Image</label>
                   </td>
                   <td>
                     <input
@@ -133,8 +140,22 @@ function CreateComponent() {
                       name="img"
                       className="form-control"
                       accept="image/*"
-                      capture="environment" // Opens the back camera on mobile devices
+                      capture="environment"
                       onChange={handleFileChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="label-props">Comments</label>
+                  </td>
+                  <td>
+                    <input
+                      type="textarea"
+                      className="form-control"
+                      placeholder="Add comments"
+                      value={formData.comments}
+                      onChange={handleChange}
                     />
                   </td>
                 </tr>
@@ -157,7 +178,9 @@ function CreateComponent() {
                 ].map((key) => (
                   <tr key={key}>
                     <td>
-                      <label>{key.replace("_", " ")}</label>
+                      <label className="label-props">
+                        {key.replace("_", " ")}
+                      </label>
                     </td>
                     <td>
                       <input
@@ -180,7 +203,9 @@ function CreateComponent() {
                 {["Suit", "Waist Coat", "Bandhi", "Indowestern"].map((key) => (
                   <tr key={key}>
                     <td>
-                      <label>{key.replace("_", " ")}</label>
+                      <label className="label-props">
+                        {key.replace("_", " ")}
+                      </label>
                     </td>
                     <td>
                       <input
@@ -197,13 +222,15 @@ function CreateComponent() {
               </tbody>
             </table>
           </Tab>
-          <Tab eventKey="trouser"  title="Trouser">
+          <Tab eventKey="trouser" title="Trouser">
             <table className="table">
               <tbody>
                 {["trouser", "waist", "seat", "length"].map((key) => (
                   <tr key={key}>
                     <td>
-                      <label>{key.replace("_", " ")}</label>
+                      <label className="label-props">
+                        {key.replace("_", " ")}
+                      </label>
                     </td>
                     <td>
                       <input
@@ -222,7 +249,7 @@ function CreateComponent() {
           </Tab>
         </Tabs>
         <div className="d-flex justify-content-between">
-          <button type="submit" className="btn btn-primary mt-3">
+          <button type="submit" className="btn btn-dark btnn-back mt-3">
             Save
           </button>
         </div>
