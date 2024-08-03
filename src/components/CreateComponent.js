@@ -35,9 +35,7 @@ function CreateComponent() {
    const API_KEY = "AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ";
 
   useEffect(() => {
-    fetch(
-      "https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ"
-    )
+    fetch("https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7")
       .then((response) => response.json())
       .then((data) => {
         const maxId = data.reduce(
@@ -78,7 +76,7 @@ function CreateComponent() {
     const newData = { ...formData, id: nextId.toString() };
 
     fetch(
-      "https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ",
+      "https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7",
       {
         method: "POST",
         headers: {

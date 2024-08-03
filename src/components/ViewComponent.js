@@ -21,7 +21,7 @@ function ViewComponent() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ"
+          "https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7"
         );
         setData(response.data);
         setFilteredData(response.data);
@@ -41,7 +41,7 @@ function ViewComponent() {
     };
 
     fetchData();
-  }, [retryCount]);
+  }, []);
 
   useEffect(() => {
     const updateGreeting = () => {

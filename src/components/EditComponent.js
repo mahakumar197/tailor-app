@@ -26,9 +26,7 @@ function EditComponent() {
 
   useEffect(() => {
     axios
-      .get(
-        `https://sheets.googleapis.com/v4/spreadsheets/1toXGwtF9SVavjy4cxOPMa0Hi3fTFngkfMF4UbWdv16I/values/Measurement_data?key=AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ/search?id=${id}`
-      )
+      .get(`https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7`)
       .then((response) => {
         if (response.data.length > 0) {
           setFormData(response.data[0]);
@@ -64,21 +62,24 @@ function EditComponent() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("https://sheetdb.io/api/v1/bdmyeklcafs0f/batch_update", {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        data: [
-          {
-            query: `id=${id}`,
-            ...formData,
-          },
-        ],
-      }),
-    })
+    fetch(
+      "https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7/batch_update",
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: [
+            {
+              query: `id=${id}`,
+              ...formData,
+            },
+          ],
+        }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
