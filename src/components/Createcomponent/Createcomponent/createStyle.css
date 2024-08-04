@@ -1,0 +1,174 @@
+/* Optional: Additional styling for inner container to handle overflow */
+.container {
+  overflow: auto;
+  padding: 20px;
+}
+
+.btnn-view {
+    background-color: transparent !important;
+    border: 1px solid black !important;
+    border-radius: 45px !important;
+    color: black !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 20px !important;
+    transition: background-color 0.3s, color 0.3s !important;
+}
+.btnn-back{
+ width: 13%;
+    border-radius: 45px !important;
+    padding-left: 22px !important;
+}
+.btnn-view:hover {
+    background-color: black !important;
+    color: white !important;
+}
+.img-logo {
+  height: 100px;
+}
+.btnn-arrow {
+  height: 50px;
+}
+.fixed-bottom-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  z-index: 1000;
+}
+
+.btn-block {
+  width: 100%;
+}
+.search-box {
+  height: 77px;
+  font-size: 20px !important;
+  border-radius: 46px !important;
+  width: 70% !important;
+}
+.data-container {
+  margin-top: 4rem !important;
+}
+.btnn-create {
+  font-size: 30px !important;
+  padding: 10px !important;
+  font-weight: 600 !important;
+  width: 20%;
+  height: 77px;
+
+  border-radius: 46px !important;
+}
+.show-fav {
+  font-size: 30px;
+}
+.img-heart {
+  height: 38px;
+  width: 39px;
+  /* padding-top: 9px; */
+  margin-top: 4px;
+}
+.header1-prop {
+  font-size: 80px;
+}
+.header3-prop {
+  color: gray;
+}
+.header4-prop {
+  margin-bottom: 80px;
+}
+.img-rounded{  
+  width: 200px; /* Set a fixed width or use a percentage if needed */
+  height: 200px; /* Make the height equal to the width for a perfect circle */
+  border-radius: 50%; /* Makes the image circular */
+  object-fit: cover; /* Ensures the image covers the area and maintains aspect ratio */
+  border: 5px solid black !important;
+}
+.img-height-arrow{
+  height: 48px;
+}
+.tab-props{
+  color: black;
+  font-size: 30px;
+}
+/* CreateComponent.css */
+
+
+.btnn-back {
+  display: flex;
+  align-items: center;
+}
+
+.img-height-arrow {
+  height: 20px;
+}
+
+.tab-props {
+  font-size: 1.25rem; /* Adjust font size for tab titles */
+}
+
+.form-control {
+  font-size: 1.1rem; /* Increase font size for input fields */
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.table label {
+  font-weight: bold;
+}
+
+.table input {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  width: 100%;
+}
+
+.table input:focus {
+  border-bottom: 2px solid #000;
+  box-shadow: none;
+}
+
+button[type="submit"] {
+  width: 100px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.label-props{
+  font-size: 30px;
+}
+.custom-tab-title .nav-link.active {
+  font-size: 40px; /* Font size for active tab title */
+  font-weight: bold;
+}
+.show-content{
+display: block;
+}
+ .content{
+display: none;
+ }
+ .list-prop{
+  list-style: none;
+ }
+ .btnn-tab{
+  max-width: 300px !important;
+  border-radius: 36px !important;
+padding: 15px 52px !important;
+ }
+.table > :not(caption) > * > * {
+ 
+  background-color: transparent !important; /* Ensure transparency */
+  border-bottom-width: none !important;
+}
+
+.transparent-input {
+  background-color: transparent !important;
+  /* border: 1px solid #ced4da; */
+}
+
+.border-0 {
+  border: none !important;
+}

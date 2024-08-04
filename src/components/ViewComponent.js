@@ -12,77 +12,61 @@ function ViewComponent() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [retryCount, setRetryCount] = useState(0);
-  const [timeoutId, setTimeoutId] = useState(null);
   const [greeting, setGreeting] = useState("");
   const navigate = useNavigate();
 
+  // Fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7"
+          "https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb"
         );
         setData(response.data);
+        console.log(response.data,"dsts")
         setFilteredData(response.data);
-        setRetryCount(0);
       } catch (error) {
-        if (error.response && error.response.status === 429) {
-          const delay = Math.pow(2, retryCount) * 1000;
-          console.error(
-            `Too many requests, retrying in ${delay / 1000} seconds...`
-          );
-          setRetryCount(retryCount + 1);
-          setTimeout(fetchData, delay);
-        } else {
-          console.error("There was an error fetching the data!", error);
-        }
+        console.error("There was an error fetching the data!", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once
 
+  // Set greeting message based on the time of day
   useEffect(() => {
-    const updateGreeting = () => {
-      const hours = new Date().getHours();
-      if (hours < 12) {
-        setGreeting("Good Morning");
-      } else if (hours < 18) {
-        setGreeting("Good Afternoon");
-      } else {
-        setGreeting("Good Evening");
-      }
-    };
+    const hours = new Date().getHours();
+    if (hours < 12) {
+      setGreeting("Good Morning");
+    } else if (hours < 18) {
+      setGreeting("Good Afternoon");
+    } else {
+      setGreeting("Good Evening");
+    }
 
-    updateGreeting();
+    // Setup user activity timeout
+    // const handleUserActivity = () => {
+    //   clearTimeout(window.activityTimeout);
+    //   window.activityTimeout = setTimeout(() => {
+    //     navigate("/login");
+    //   }, 5 * 60 * 1000); // 5 minutes
+    // };
 
-    const handleUserActivity = () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      const id = setTimeout(() => {
-        navigate("/login");
-      }, 5 * 60 * 1000); // 5 minutes
-      setTimeoutId(id);
-    };
+    // window.addEventListener("mousemove", handleUserActivity);
+    // window.addEventListener("keydown", handleUserActivity);
+    // window.addEventListener("click", handleUserActivity);
 
-    window.addEventListener("mousemove", handleUserActivity);
-    window.addEventListener("keydown", handleUserActivity);
-    window.addEventListener("click", handleUserActivity);
+    // handleUserActivity(); // Start the timer
 
-    handleUserActivity(); // Start the timer
+    // return () => {
+    //   clearTimeout(window.activityTimeout);
+    //   window.removeEventListener("mousemove", handleUserActivity);
+    //   window.removeEventListener("keydown", handleUserActivity);
+    //   window.removeEventListener("click", handleUserActivity);
+    // };
+  }, [navigate]);
 
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      window.removeEventListener("mousemove", handleUserActivity);
-      window.removeEventListener("keydown", handleUserActivity);
-      window.removeEventListener("click", handleUserActivity);
-    };
-  }, [timeoutId, navigate]);
-
+  // Debounce the search input
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {
@@ -135,6 +119,7 @@ function ViewComponent() {
           <h2 className="header4-prop">Customer List</h2>
           {filteredData.length > 0 ? (
             filteredData.map((item) => (
+              
               <div key={item.id} className="col-md-12 row mb-4">
                 <div className="col-2">
                   <img src={item.img} alt={item.Name} className="img-rounded" />
@@ -153,6 +138,12 @@ function ViewComponent() {
                     View
                     <img src={arrow} className="ms-3 w-25" alt="arrow" />
                   </Button>
+                  <Link
+                    to={`/edit/${item.id}`}
+                    className="btn btn-warning btn-sm"
+                  >
+                    Edit
+                  </Link>
                 </div>
               </div>
             ))

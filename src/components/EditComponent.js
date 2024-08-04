@@ -1,131 +1,330 @@
 import React, { useState, useEffect } from "react";
+import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-
-function EditComponent() {
-  const { id } = useParams();
-  const [formData, setFormData] = useState({
+import { useParams } from "react-router-dom";
+const EditComponent = ({ match, history }) => {
+  const [data, setData] = useState({
     Name: "",
+    phoneNumber: "",
+    address: "",
     img: "",
     Suit: "",
-    "Waist Coat": "",
+    WaistCoat: "",
     Bandhi: "",
     Indowestern: "",
     shirt: "",
     kurta: "",
     shoulder: "",
-    "sleeve length": "",
+    sleeveLength: "",
     chest: "",
     waist: "",
     seat: "",
-    "neck ": "",
+    neck: "",
     bicep: "",
+    comments: "",
   });
-  const navigate = useNavigate();
+
+  const { id } = useParams();
 
   useEffect(() => {
     axios
-      .get(`https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7`)
+      .get(
+        `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb/${id}`
+      )
       .then((response) => {
-        if (response.data.length > 0) {
-          setFormData(response.data[0]);
-        }
+        setData(response.data[0]);
       })
-      .catch((error) => {
-        console.error("There was an error fetching the data!", error);
-      });
+      .catch((error) => console.error("Error fetching data:", error));
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({
-          ...formData,
-          img: reader.result,
-        });
-      };
-      reader.readAsDataURL(file);
-    }
+    setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(
-      "https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7/batch_update",
-      {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: [
-            {
-              query: `id=${id}`,
-              ...formData,
-            },
-          ],
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        navigate(`/data/${id}`);
+    axios
+      .patch(
+        `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb/${id}`,
+        data
+      )
+      .then((response) => {
+        history.push(`/view/${id}`); // Redirect to view component
       })
-      .catch((error) => {
-        console.error("There was an error updating the entry!", error);
-      });
+      .catch((error) => console.error("Error updating data:", error));
   };
 
   return (
-    <div className="container">
-      <h1 className="my-4">Edit Entry</h1>
-      <form onSubmit={handleSubmit}>
-        {Object.keys(formData).map((key) =>
-          key !== "img" ? (
-            <div className="form-group my-2" key={key}>
-              <label>{key.replace("_", " ")}</label>
-              <input
-                type="text"
-                name={key}
-                className="form-control"
-                placeholder={key.replace("_", " ")}
-                value={formData[key]}
-                onChange={handleChange}
-              />
-            </div>
-          ) : (
-            <div className="form-group my-2" key={key}>
-              <label>{key.replace("_", " ")}</label>
-              <input
-                type="file"
-                name={key}
-                className="form-control"
-                accept="image/png, image/jpeg"
-                onChange={handleFileChange}
-              />
-            </div>
-          )
-        )}
-        <button type="submit" className="btn btn-primary mt-3">
-          Save
-        </button>
-      </form>
-    </div>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group as={Row} controlId="formName">
+        <Form.Label column sm="2">
+          Name
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="Name"
+            value={data.Name}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formPhoneNumber">
+        <Form.Label column sm="2">
+          Phone Number
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="phoneNumber"
+            value={data.phoneNumber}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formAddress">
+        <Form.Label column sm="2">
+          Address
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="address"
+            value={data.address}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formImage">
+        <Form.Label column sm="2">
+          Image
+        </Form.Label>
+        <Col sm="10">
+          <img
+            src={data.img}
+            alt="Profile"
+            style={{ width: "100px", height: "100px" }}
+          />
+          <Form.Control
+            type="text"
+            name="img"
+            value={data.img}
+            onChange={handleChange}
+            placeholder="Paste base64 image data"
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formSuit">
+        <Form.Label column sm="2">
+          Suit
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="Suit"
+            value={data.Suit}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formWaistCoat">
+        <Form.Label column sm="2">
+          Waist Coat
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="WaistCoat"
+            value={data.WaistCoat}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formBandhi">
+        <Form.Label column sm="2">
+          Bandhi
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="Bandhi"
+            value={data.Bandhi}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formIndowestern">
+        <Form.Label column sm="2">
+          Indowestern
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="Indowestern"
+            value={data.Indowestern}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formShirt">
+        <Form.Label column sm="2">
+          Shirt
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="shirt"
+            value={data.shirt}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formKurta">
+        <Form.Label column sm="2">
+          Kurta
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="kurta"
+            value={data.kurta}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formShoulder">
+        <Form.Label column sm="2">
+          Shoulder
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="shoulder"
+            value={data.shoulder}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formSleeveLength">
+        <Form.Label column sm="2">
+          Sleeve Length
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="sleeveLength"
+            value={data.sleeveLength}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formChest">
+        <Form.Label column sm="2">
+          Chest
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="chest"
+            value={data.chest}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formWaist">
+        <Form.Label column sm="2">
+          Waist
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="waist"
+            value={data.waist}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formSeat">
+        <Form.Label column sm="2">
+          Seat
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="seat"
+            value={data.seat}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formNeck">
+        <Form.Label column sm="2">
+          Neck
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="neck"
+            value={data.neck}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formBicep">
+        <Form.Label column sm="2">
+          Bicep
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="text"
+            name="bicep"
+            value={data.bicep}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formComments">
+        <Form.Label column sm="2">
+          Comments
+        </Form.Label>
+        <Col sm="10">
+          <Form.Control
+            as="textarea"
+            name="comments"
+            value={data.comments}
+            onChange={handleChange}
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row}>
+        <Col sm="10">
+          <Button type="submit" variant="primary">
+            Save Changes
+          </Button>
+        </Col>
+      </Form.Group>
+    </Form>
   );
-}
+};
 
 export default EditComponent;

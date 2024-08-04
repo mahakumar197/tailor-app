@@ -35,7 +35,7 @@ function CreateComponent() {
    const API_KEY = "AIzaSyBsxIsRvRV50Hx2IQ0fevtqb2dAWaawgxQ";
 
   useEffect(() => {
-    fetch("https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7")
+    fetch("https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb")
       .then((response) => response.json())
       .then((data) => {
         const maxId = data.reduce(
@@ -71,29 +71,40 @@ function CreateComponent() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newData = { ...formData, id: nextId.toString() };
+ const handleSubmit = (e) => {
+   e.preventDefault();
 
-    fetch(
-      "https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: [newData] }),
-      }
-    )
-      .then((response) => response.json())
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("There was an error creating the entry!", error);
-      });
-  };
+   // Construct the new data with the nextId
+   const newData = { ...formData, id: nextId.toString() };
+
+   // Prepare the request payload
+   const requestPayload = {
+     data: [newData],
+   };
+
+   fetch("https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb", {
+     method: "POST",
+     headers: {
+       Accept: "application/json",
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify(requestPayload),
+   })
+     .then((response) => {
+       if (!response.ok) {
+         throw new Error(`HTTP error! status: ${response.status}`);
+       }
+       return response.json();
+     })
+     .then((data) => {
+       console.log("Data successfully saved:", data);
+       navigate("/");
+     })
+     .catch((error) => {
+       console.error("There was an error creating the entry:", error);
+     });
+ };
+
 
   return (
     <div className="container">

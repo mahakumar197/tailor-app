@@ -6,6 +6,7 @@ import EditComponent from "./components/EditComponent";
 import DataComponent from "./components/DataComponent";
 import Login from "./components/Login/Login";
 import "./App.css";
+import Create from "./components/Createcomponent/Createcomponent/Create";
 function App() {
   return (
     <Router>
@@ -14,7 +15,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<ViewComponent />} />
-            <Route path="/create" element={<CreateComponent />} />
+            <Route path="/create" element={<Create />} />
             <Route path="/edit/:id" element={<EditComponent />} />
             <Route path="/data/:id" element={<DataComponent />} />
           </Routes>

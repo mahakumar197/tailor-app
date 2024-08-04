@@ -11,8 +11,11 @@ function DataComponent() {
 
   useEffect(() => {
     axios
-      .get("https://sheet.best/api/sheets/08c3963e-2d81-4d15-9aaa-1e5a1ac528d7/search?id=${id}")
+      .get(
+        `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb/id=${id}`
+      )
       .then((response) => {
+        console.log(response,"resdata")
         setData(response.data[0]);
       })
       .catch((error) => {
