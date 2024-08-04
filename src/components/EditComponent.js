@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const EditComponent = ({ match, history }) => {
   const [data, setData] = useState({
     Name: "",
@@ -25,11 +25,13 @@ const EditComponent = ({ match, history }) => {
   });
 
   const { id } = useParams();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     axios
       .get(
-        `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb/${id}`
+        `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb/id/${id}`
       )
       .then((response) => {
         setData(response.data[0]);
@@ -47,11 +49,11 @@ const EditComponent = ({ match, history }) => {
 
     axios
       .patch(
-        `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb/${id}`,
+        `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb/id/${id}`,
         data
       )
       .then((response) => {
-        history.push(`/view/${id}`); // Redirect to view component
+       navigate(`/data/${id}`);// Redirect to view component
       })
       .catch((error) => console.error("Error updating data:", error));
   };

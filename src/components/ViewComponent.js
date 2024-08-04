@@ -20,7 +20,7 @@ function ViewComponent() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb"
+          `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`
         );
         setData(response.data);
         console.log(response.data,"dsts")

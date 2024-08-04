@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "./createStyle.css"; // Import the custom CSS
 import arrow from "./arrowleft.png";
+import axios from "axios";
 
 function Create() {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ function Create() {
     bicep: "",
     comments: "",
   });
-  const [nextId, setNextId] = useState(1);
+  // const [nextId, setNextId] = useState(1);
   const navigate = useNavigate();
  const [toggle, setToggle] = useState(1);
 
@@ -33,20 +34,20 @@ function Create() {
  function updateToggle(id) {
    setToggle(id);
  }
-  useEffect(() => {
-    fetch("https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb")
-      .then((response) => response.json())
-      .then((data) => {
-        const maxId = data.reduce(
-          (max, item) => Math.max(max, parseInt(item.id || 0)),
-          0
-        );
-        setNextId(maxId + 1);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the data!", error);
-      });
-  }, []);
+  const [existingData, setExistingData] = useState([]);
+    useEffect(() => {
+      axios
+        .get(`https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`)
+        .then((response) => {
+          setExistingData(response.data);
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+    }, []);
+     const nextId = useMemo(() => {
+       return existingData.length > 0
+         ? Math.max(...existingData.map((item) => parseInt(item.id, 10))) + 1
+         : 1;
+     }, [existingData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,42 +72,39 @@ function Create() {
   };
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-    // Construct the new data with the nextId
-    const newData = { ...formData, id: nextId.toString() };
+  // Construct the new data with the nextId
+  const newData = { ...formData, id: nextId.toString() };
 
-    // Prepare the request payload
-    const requestPayload = {
-      data: [newData],
-    };
+  // Prepare the request payload
+  const requestPayload = [newData]; // Ensure it's an array of objects
 
-    fetch(
-      "https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestPayload),
+  fetch(`https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestPayload),
+  })
+    .then((response) => {
+      console.log(response, "response");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Data successfully saved:", data);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("There was an error creating the entry:", error);
-      });
-  };
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Data successfully saved:", data);
+      navigate("/");
+    })
+    .catch((error) => {
+      console.error("There was an error creating the entry:", error);
+    });
+};
+
 
   return (
     <div className="container">
@@ -160,7 +158,7 @@ function Create() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input"
+                        className="form-control transparent-input fs-1"
                         value={formData[key]}
                         onChange={handleChange}
                       />
@@ -178,7 +176,7 @@ function Create() {
                   <input
                     type="file"
                     name="img"
-                    className="form-control transparent-input"
+                    className="form-control transparent-input fs-1"
                     accept="image/*"
                     capture="environment"
                     onChange={handleFileChange}
@@ -194,7 +192,7 @@ function Create() {
                 <td>
                   <textarea
                     name="comments"
-                    className="form-control transparent-input"
+                    className="form-control transparent-input fs-1"
                     value={formData.comments || ""}
                     onChange={handleChange}
                   />
@@ -232,7 +230,7 @@ function Create() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input"
+                        className="form-control transparent-input fs-1"
                         value={formData[key]}
                         onChange={handleChange}
                       />
@@ -262,7 +260,7 @@ function Create() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input"
+                        className="form-control transparent-input fs-1"
                         value={formData[key]}
                         onChange={handleChange}
                       />
@@ -292,7 +290,7 @@ function Create() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input"
+                        className="form-control transparent-input fs-1"
                         value={formData[key]}
                         onChange={handleChange}
                       />
