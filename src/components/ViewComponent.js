@@ -101,7 +101,7 @@ function ViewComponent() {
           <input
             type="text"
             placeholder="Enter Customer's Phone Number Or Name"
-            className="form-control search-box"
+            className="form-control search-box fs-3"
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -138,12 +138,12 @@ function ViewComponent() {
                     View
                     <img src={arrow} className="ms-3 w-25" alt="arrow" />
                   </Button>
-                  <Link
+                  {/* <Link
                     to={`/edit/${item.id}`}
                     className="btn btn-warning btn-sm"
                   >
                     Edit
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             ))

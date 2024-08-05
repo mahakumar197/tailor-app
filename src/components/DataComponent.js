@@ -39,10 +39,19 @@ function updateToggle(id) {
     <div className="container pt-5">
       <div className="d-flex justify-content-between">
         <h1 className="my-4">Customer Details</h1>
-        <Link to={`/`} className="btn btn-sm fs-2 mt-4">
-          <img src={arrow} className="ms-4 img-height-arrow me-3" alt="arrow" />
-          back
-        </Link>
+        <div className="d-flex">
+          <Link to={`/`} className="btn btn-sm fs-2 mt-4">
+            <img
+              src={arrow}
+              className="ms-4 img-height-arrow me-3"
+              alt="arrow"
+            />
+            back
+          </Link>
+          <Link to={`/edit/${id}`} className="btn btn-sm fs-2 mt-4">
+            Edit
+          </Link>
+        </div>
       </div>
       <div className="d-flex flex-column align-items-center justify-content-center text-center">
         <img src={data.img} alt={data.Name} className="img-rounded" />
@@ -85,10 +94,12 @@ function updateToggle(id) {
             ].map((key) => (
               <React.Fragment key={key}>
                 <tr>
-                  <th>{key.replace("_", " ")}</th>
+                  <th className="label-props">{key.replace("_", " ")}</th>
                 </tr>
                 <tr>
-                  <td>{data[key] || "N/A"}</td>
+                  <td className="transparent-input fs-2">
+                    {data[key] || "N/A"}
+                  </td>
                 </tr>
               </React.Fragment>
             ))}
@@ -104,10 +115,12 @@ function updateToggle(id) {
             {["Suit", "Waist Coat", "Bandhi", "Indowestern"].map((key) => (
               <React.Fragment key={key}>
                 <tr key={key}>
-                  <th>{key.replace("_", " ")}</th>
+                  <th className="label-props">{key.replace("_", " ")}</th>
                 </tr>
                 <tr>
-                  <td>{data[key] || "N/A"}</td>
+                  <td className="transparent-input fs-2">
+                    {data[key] || "N/A"}
+                  </td>
                 </tr>
               </React.Fragment>
             ))}
@@ -123,10 +136,12 @@ function updateToggle(id) {
             {["trouser", "waist", "seat", "length"].map((key) => (
               <React.Fragment key={key}>
                 <tr>
-                  <th>{key.replace("_", " ")}</th>
+                  <th className="label-props">{key.replace("_", " ")}</th>
                 </tr>
                 <tr>
-                  <td>{data[key] || "N/A"}</td>
+                  <td className="transparent-input fs-2">
+                    {data[key] || "N/A"}
+                  </td>
                 </tr>
               </React.Fragment>
             ))}
