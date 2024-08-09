@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import logo from "./Logo.png";
 import arrow from "./arrow.png";
@@ -9,21 +9,25 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const hardcodedUsername = "9876543210";
-    const hardcodedPassword = "Today@2024";
+    const hardcodedUsername = "Hardman_atelier";
+    const hardcodedPassword = "Hardman@2024";
 
     if (username === hardcodedUsername && password === hardcodedPassword) {
       console.log("Login successful");
-      navigate("/"); // Redirect to home after successful login
+      navigate("/view"); // Redirect to home after successful login
     } else {
       console.log("Invalid credentials");
       setErrorMessage("Invalid username or password");
     }
   };
+   const toggleShowPassword = () => {
+     setShowPassword(!showPassword);
+   };
 
   return (
     <div className="container">
@@ -37,12 +41,12 @@ function Login() {
             <h1 className="pb-4 d-flex justify-content-center">Login</h1>
             <Form.Group controlId="formUsername" className="mt-4">
               <Form.Label className="pb-2 fs-3 form-label-prop">
-                Enter Number
+                User Name
               </Form.Label>
               <Form.Control
                 type="text"
                 className="data-input"
-                placeholder="Enter Number"
+                placeholder="Enter Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -52,12 +56,18 @@ function Login() {
                 Password
               </Form.Label>
               <Form.Control
-                type="password"
-                className="data-input"
+                type={showPassword ? "text" : "password"}
+                className="data-input custom-password-wrapper"
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <Link
+                onClick={toggleShowPassword}
+                className="btn btn-sm fs-4 toggle-password-visibility"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </Link>
             </Form.Group>
             {errorMessage && <p className="text-danger mt-2">{errorMessage}</p>}
           </div>
@@ -72,8 +82,8 @@ function Login() {
             Forgot Password?
           </p>
         </Form>
-        <div className="copyright">
-          <h4>Version 0.1</h4>
+        <div className="copyright mt-5">
+          <h4 className="mt-5">Version 0.1</h4>
           <div className="mt-3">
             <h5>
               Copyrights owned by <span className="ms-3 head-t2">HARDMAN</span>

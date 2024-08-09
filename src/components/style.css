@@ -52,35 +52,33 @@
   margin-top: 4rem !important;
 }
 .btnn-create {
-  font-size: 30px !important;
+  font-size: 18px !important;
   padding: 10px !important;
-  font-weight: 600 !important;
   width: 20%;
-  height: 77px;
-
+  height: 60px;
   border-radius: 46px !important;
 }
 .show-fav {
-  font-size: 30px;
+  font-size: 20px;
 }
 .img-heart {
-  height: 38px;
-  width: 39px;
-  /* padding-top: 9px; */
-  margin-top: 4px;
+  height: 32px;
+  width: 32px;
 }
 .header1-prop {
-  font-size: 80px;
+  font-size: 36px;
+    font-weight: 600;
 }
 .header3-prop {
-  color: gray;
+  color: #020614;
 }
 .header4-prop {
-  margin-bottom: 80px;
+  
+   color: #1D1D21;
 }
 .img-rounded{  
-  width: 200px; /* Set a fixed width or use a percentage if needed */
-  height: 200px; /* Make the height equal to the width for a perfect circle */
+  width: 100px; /* Set a fixed width or use a percentage if needed */
+  height: 100px; /* Make the height equal to the width for a perfect circle */
   border-radius: 50%; /* Makes the image circular */
   object-fit: cover; /* Ensures the image covers the area and maintains aspect ratio */
   border: 5px solid black !important;
@@ -101,7 +99,8 @@
 }
 
 .img-height-arrow {
-  height: 20px;
+  height: 17px;
+  width: 22px;
 }
 
 .tab-props {
@@ -137,16 +136,12 @@ button[type="submit"] {
   font-size: 1.1rem;
   font-weight: bold;
 }
-.label-props{
-  font-size: 30px;
-}
+
 .custom-tab-title .nav-link.active {
   font-size: 40px; /* Font size for active tab title */
   font-weight: bold;
 }
-.label-props{
-  font-size: 30px;
-}
+
 .custom-tab-title .nav-link.active {
   font-size: 40px; /* Font size for active tab title */
   font-weight: bold;
@@ -178,4 +173,12 @@ padding: 15px 52px !important;
 
 .border-0 {
   border: none !important;
+}
+.info-color{
+ font-size: 18px;
+}
+.btnn-save{
+  border-radius: 36px !important;
+    font-size: 20px !important;
+    font-weight: 500;
 }

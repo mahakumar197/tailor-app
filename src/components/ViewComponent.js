@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import debounce from "lodash/debounce";
 import "./style.css";
 import arrow from "./arrowBlack.png";
-import Heart from "./Heart.png";
+import profile from "./Profile.png";
 import add from "./addbtn.png";
 
 function ViewComponent() {
@@ -20,7 +20,7 @@ function ViewComponent() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`
+          `https://sheet.best/api/sheets/16653153-1f20-4372-ad25-23df3d5a54ae`
         );
         setData(response.data);
         console.log(response.data,"dsts")
@@ -44,41 +44,27 @@ function ViewComponent() {
       setGreeting("Good Evening");
     }
 
-    // Setup user activity timeout
-    // const handleUserActivity = () => {
-    //   clearTimeout(window.activityTimeout);
-    //   window.activityTimeout = setTimeout(() => {
-    //     navigate("/login");
-    //   }, 5 * 60 * 1000); // 5 minutes
-    // };
-
-    // window.addEventListener("mousemove", handleUserActivity);
-    // window.addEventListener("keydown", handleUserActivity);
-    // window.addEventListener("click", handleUserActivity);
-
-    // handleUserActivity(); // Start the timer
-
-    // return () => {
-    //   clearTimeout(window.activityTimeout);
-    //   window.removeEventListener("mousemove", handleUserActivity);
-    //   window.removeEventListener("keydown", handleUserActivity);
-    //   window.removeEventListener("click", handleUserActivity);
-    // };
+   
   }, [navigate]);
 
   // Debounce the search input
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {
-        const results = data.filter(
-          (item) =>
-            item.Name.toLowerCase().includes(value.toLowerCase()) ||
-            item.phoneNumber.includes(value)
-        );
+        console.log("Data:", data); // Inspect the data structure
+        const results = data.filter((item) => {
+          const name = item.Name ? item.Name.toLowerCase() : "";
+          const phoneNumber = item["Phone Number"] ? item["Phone Number"] : "";
+
+          return (
+            name.includes(value.toLowerCase()) || phoneNumber.includes(value)
+          );
+        });
         setFilteredData(results);
       }, 300),
     [data]
   );
+
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
@@ -90,18 +76,18 @@ function ViewComponent() {
     <div className="container pt-5">
       <div className="d-flex header-content justify-content-between">
         <h1 className="header1-prop">{greeting}</h1>
-        <div className="d-flex mt-5">
+        {/* <div className="d-flex">
           <img src={Heart} className="me-3 img-heart" alt="fav" />
           <p className="show-fav">Show Favourites</p>
-        </div>
+        </div> */}
       </div>
       <div className="pt-4">
-        <h2 className="my-4 header3-prop">Search Customer</h2>
+        <h5 className="my-4 header3-prop fw-medium">Search Customer</h5>
         <div className="d-flex justify-content-between mb-4">
           <input
             type="text"
             placeholder="Enter Customer's Phone Number Or Name"
-            className="form-control search-box fs-3"
+            className="form-control search-box"
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -116,39 +102,38 @@ function ViewComponent() {
         </div>
 
         <div className="row data-container">
-          <h2 className="header4-prop">Customer List</h2>
+          <h5 className="header4-prop fw-semibold mb-5">Customer List</h5>
           {filteredData.length > 0 ? (
             filteredData.map((item) => (
-              
               <div key={item.id} className="col-md-12 row mb-4">
                 <div className="col-2">
-                  <img src={item.img} alt={item.Name} className="img-rounded" />
+                  <img
+                    src={item.img || profile}
+                    // alt={Heart}
+                    className="img-rounded"
+                  />
                 </div>
-                <div className="col-7 d-flex align-items-center row mb-5 ms-5">
-                  <h4>{item.phoneNumber || "N/A"}</h4>
-                  <h1>{item.Name}</h1>
-                  <h5>{item.address || "N/A"}</h5>
+                <div className="col-8 d-flex align-items-center row mb-5">
+                  <p className="info-color fw-semibold m-0 ">
+                    {item["Phone Number"] || "N/A"}
+                  </p>
+                  <p className="fs-4 fw-semibold m-0">{item.Name}</p>
+                  <p className="info-color">{item.Address || "N/A"}</p>
                 </div>
                 <div className="col-2 d-flex align-items-center">
                   <Button
                     as={Link}
                     to={`/data/${item.id}`}
-                    className="btnn-view d-flex me-2 w-75 fs-4"
+                    className="btnn-view d-flex fs-5"
                   >
                     View
-                    <img src={arrow} className="ms-3 w-25" alt="arrow" />
+                    <img src={arrow} className="ms-2" alt="arrow" />
                   </Button>
-                  {/* <Link
-                    to={`/edit/${item.id}`}
-                    className="btn btn-warning btn-sm"
-                  >
-                    Edit
-                  </Link> */}
                 </div>
               </div>
             ))
           ) : (
-            <h4>No results found</h4>
+            <h6>No results found</h6>
           )}
         </div>
       </div>

@@ -34,35 +34,27 @@ function CreateDummyComponent() {
   const [toggle, setToggle] = useState(1);
   const navigate = useNavigate();
   const [existingData, setExistingData] = useState([]);
+  const [nextId, setNextId] = useState(1); // Add this line to define nextId state
 
   function updateToggle(id) {
     setToggle(id);
   }
 
   useEffect(() => {
-    // Load the image from localStorage
-    const savedImage = localStorage.getItem("croppedImage");
-    if (savedImage) {
-      setFormData((prevState) => ({
-        ...prevState,
-        img: savedImage,
-      }));
-    }
-
-    // Fetch existing data from API
-    axios
-      .get(`https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`)
-      .then((response) => {
-        setExistingData(response.data);
+  fetch(`https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`)
+      .then((response) => response.json())
+      .then((data) => {
+        setExistingData(data);
+        const maxId = data.reduce(
+          (max, item) => Math.max(max, parseInt(item.id || 0)),
+          0
+        );
+        setNextId(maxId + 1); // Set the nextId here
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        console.error("There was an error fetching the data!", error);
+      });
   }, []);
-
-  const nextId = useMemo(() => {
-    return existingData.length > 0
-      ? Math.max(...existingData.map((item) => parseInt(item.id, 10))) + 1
-      : 1;
-  }, [existingData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,149 +64,87 @@ function CreateDummyComponent() {
     });
   };
 
-  const handleFileChange = (e) => {
-    const imageFile = e.target.files[0];
-    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+const handleFileChange = (e) => {
+  const imageFile = e.target.files[0];
+  const maxSize = 5 * 1024 * 1024; // 5MB in bytes
 
-    if (imageFile) {
-      if (imageFile.size > maxSize) {
-        alert("File size exceeds 5MB. Please upload a smaller image.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFile(reader.result);
-      };
-      reader.readAsDataURL(imageFile);
+  if (imageFile) {
+    if (imageFile.size > maxSize) {
+      alert("File size exceeds 5MB. Please upload a smaller image.");
+      return;
     }
-  };
 
-  const onCropComplete = async (croppedAreaPixels) => {
-    try {
-      const croppedImg = await getCroppedImg(file, croppedAreaPixels);
-      setCroppedImage(croppedImg); // Set cropped image
-      resizeAndSetImage(croppedImg);
-    } catch (error) {
-      console.error("Error cropping image:", error);
-    }
-  };
-
-  const resizeAndSetImage = (croppedImg) => {
-    const img = new Image();
-    img.src = croppedImg;
-
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const MAX_WIDTH = 600; // Updated size
-      const MAX_HEIGHT = 600; // Updated size
-      let { width, height } = img;
-
-      if (width > height) {
-        if (width > MAX_WIDTH) {
-          height *= MAX_WIDTH / width;
-          width = MAX_WIDTH;
-        }
-      } else {
-        if (height > MAX_HEIGHT) {
-          width *= MAX_HEIGHT / height;
-          height = MAX_HEIGHT;
-        }
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      ctx.drawImage(img, 0, 0, width, height);
-      canvas.toBlob(
-        (blob) => {
-          const file = new File([blob], "croppedImage.jpg", {
-            type: "image/jpeg",
-            lastModified: Date.now(),
-          });
-          const filePreview = URL.createObjectURL(file);
-
-          // Save to localStorage
-          localStorage.setItem("croppedImage", filePreview);
-
-          setFormData((prevState) => ({
-            ...prevState,
-            img: filePreview,
-          }));
-        },
-        "image/jpeg",
-        1
-      );
-    };
-
-    img.onerror = () => {
-      alert("Invalid image content.");
-    };
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Construct the new data with the nextId
-    const newData = { ...formData, id: nextId.toString() };
-
-    // Prepare the request payload
-    const requestPayload = [newData]; // Ensure it's an array of objects
-
-    fetch(
-      `https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestPayload),
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Data successfully saved:", data);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("There was an error creating the entry:", error);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({
+        ...formData,
+        img: reader.result, // Store the Base64 string in formData
       });
-  };
+    };
+    reader.readAsDataURL(imageFile); // Convert image to Base64 string
+  }
+};
+
+
+ const handleSubmit = (e) => {
+   console.log("save");
+   e.preventDefault(); // Prevents the default form submission
+
+   const newData = { ...formData, id: nextId.toString() };
+   console.log("Submitting data:", newData);
+
+   fetch(`https://sheet.best/api/sheets/dde291c8-6117-4ecc-a292-73e37c8d71bb`, {
+     method: "POST",
+     headers: {
+       Accept: "application/json",
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify(newData),
+   })
+     .then((response) => response.json())
+     .then((data) => {
+       console.log("Response data:", data);
+       if (data) {
+         // Redirect to the view component after successful submission
+         navigate("/ "); // Change '/view' to your actual view route
+       } else {
+         console.error("Error response data:", data);
+       }
+     })
+     .catch((error) => {
+       console.error("There was an error creating the entry!", error);
+     });
+ };
+
 
   return (
     <div className="container">
       <div className="d-flex justify-content-between">
-        <h1 className="my-4">Add New Customer</h1>
-        <Link to={`/`} className="btn btn-sm fs-2 mt-4">
-          <img src={arrow} className="ms-4 img-height-arrow me-3" alt="arrow" />
+        <h1 className="header1-prop my-4">Add New Customer</h1>
+        <Link to={`/`} className="btn btn-sm fs-5 mt-4">
+          <img src={arrow} className="ms-4 img-height-arrow me-2" alt="arrow" />
           back
         </Link>
       </div>
       <div className="tab">
         <ul className="d-flex justify-content-between">
           <li className="list-prop" onClick={() => updateToggle(1)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 fs-4">
-              Personal Details
+            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
+              Info
             </Button>
           </li>
           <li className="list-prop" onClick={() => updateToggle(2)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 fs-4">
+            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
               Shirt
             </Button>
           </li>
           <li className="list-prop" onClick={() => updateToggle(3)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 fs-4">
+            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
               Suit
             </Button>
           </li>
           <li className="list-prop" onClick={() => updateToggle(4)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 fs-4">
+            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
               Trouser
             </Button>
           </li>
@@ -229,7 +159,7 @@ function CreateDummyComponent() {
                 <React.Fragment key={key}>
                   <tr>
                     <td className="border-0">
-                      <label className="label-props">
+                      <label className="fs-5">
                         {key.replace("_", " ")}
                       </label>
                     </td>
@@ -239,7 +169,7 @@ function CreateDummyComponent() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input fs-1"
+                        className="form-control transparent-input fs-5"
                         value={formData[key]}
                         onChange={handleChange}
                         required
@@ -250,7 +180,7 @@ function CreateDummyComponent() {
               ))}
               <tr>
                 <td className="border-0">
-                  <label className="label-props">Image</label>
+                  <label className="fs-5">Image</label>
                 </td>
               </tr>
               <tr>
@@ -258,12 +188,12 @@ function CreateDummyComponent() {
                   <input
                     type="file"
                     name="img"
-                    className="form-control transparent-input fs-1"
+                    className="form-control transparent-input fs-5"
                     accept="image/*"
                     capture="environment"
                     onChange={handleFileChange}
                   />
-                  {file && (
+                  {/* {file && (
                     <ImageCropper
                       image={file}
                       onCropComplete={onCropComplete}
@@ -276,7 +206,7 @@ function CreateDummyComponent() {
                       className="mt-3"
                       style={{ maxWidth: "100%", height: "auto" }}
                     />
-                  )}
+                  )} */}
                 </td>
               </tr>
             </tbody>
@@ -299,7 +229,7 @@ function CreateDummyComponent() {
                 <React.Fragment key={key}>
                   <tr>
                     <td className="border-0">
-                      <label className="label-props">
+                      <label className="fs-5">
                         {key.replace("_", " ")}
                       </label>
                     </td>
@@ -309,7 +239,7 @@ function CreateDummyComponent() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input fs-1"
+                        className="form-control transparent-input fs-5"
                         value={formData[key]}
                         onChange={handleChange}
                       />
@@ -328,7 +258,7 @@ function CreateDummyComponent() {
                 <React.Fragment key={key}>
                   <tr>
                     <td className="border-0">
-                      <label className="label-props">
+                      <label className="fs-5">
                         {key.replace("_", " ")}
                       </label>
                     </td>
@@ -338,7 +268,7 @@ function CreateDummyComponent() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input fs-1"
+                        className="form-control transparent-input fs-5"
                         value={formData[key]}
                         onChange={handleChange}
                       />
@@ -353,11 +283,11 @@ function CreateDummyComponent() {
         <div className={toggle === 4 ? "show-content" : "content"}>
           <table className="table">
             <tbody>
-              {["shirt", "kurta"].map((key) => (
+              {["pant waist", "pant length", "thigh", "bottom"].map((key) => (
                 <React.Fragment key={key}>
                   <tr>
                     <td className="border-0">
-                      <label className="label-props">
+                      <label className="fs-5">
                         {key.replace("_", " ")}
                       </label>
                     </td>
@@ -367,7 +297,7 @@ function CreateDummyComponent() {
                       <input
                         type="text"
                         name={key}
-                        className="form-control transparent-input fs-1"
+                        className="form-control transparent-input fs-5"
                         value={formData[key]}
                         onChange={handleChange}
                       />
@@ -378,9 +308,11 @@ function CreateDummyComponent() {
             </tbody>
           </table>
         </div>
-        <button type="submit" className="btn btn-dark btn-lg mt-5">
-          Save
-        </button>
+        <div className="text-center mt-5">
+          <Button variant="dark" type="submit" className="btn btn-lg mb-5">
+            Save
+          </Button>
+        </div>
       </form>
     </div>
   );

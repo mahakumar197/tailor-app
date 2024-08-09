@@ -8,15 +8,16 @@ import Login from "./components/Login/Login";
 import "./App.css";
 // import Create from "./components/Createcomponent/Createcomponent/Create";
 import CreateDummyComponent from "./components/Createcomponent/CreateDummyComponent";
+import Create from "./components/Createcomponent/Createcomponent/Create";
 function App() {
   return (
     <Router>
       <div className="container-fluid BG-view">
         <div className="App">
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<ViewComponent />} />
-            <Route path="/create" element={<CreateDummyComponent />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/view" element={<ViewComponent />} />
+            <Route path="/create" element={<Create />} />
             <Route path="/edit/:id" element={<EditComponent />} />
             <Route path="/data/:id" element={<DataComponent />} />
           </Routes>

@@ -49,3 +49,18 @@
     align-items: center;
     
 }
+.toggle-password-visibility {
+    position: absolute;
+    right: 90px;
+    top: 49rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #333;
+}
+.custom-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
