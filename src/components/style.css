@@ -159,6 +159,7 @@ display: none;
   max-width: 300px !important;
   border-radius: 36px !important;
 padding: 15px 52px !important;
+border: 2px solid black !important;
  }
 .table > :not(caption) > * > * {
  

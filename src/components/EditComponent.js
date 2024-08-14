@@ -8,23 +8,27 @@ import "./style.css";
 const EditComponent = () => {
   const [data, setData] = useState({
     Name: "",
-    phoneNumber: "",
-    address: "",
+    "Phone Number": "",
+    Address: "",
     img: "",
-    Suit: "",
-    WaistCoat: "",
-    Bandhi: "",
-    Indowestern: "",
-    shirt: "",
-    kurta: "",
-    shoulder: "",
-    sleeveLength: "",
-    chest: "",
-    waist: "",
-    seat: "",
-    neck: "",
-    bicep: "",
-    comments: "",
+    Comments: "",
+    "Suit Length & Waist Coat Length suit": "",
+    "Indowestern Length & Bandhi Length": "",
+    "Bandhi Length & Indowestern Length suit": "",
+    "Shirt Length & Kurta Length suit": "",
+    "Shoulder & Sleeve Length suit": "",
+    "Chest & Waist | Bicep & Cuff suit": "",
+    "Upper & Lower Chest suit": "",
+    "Suit Length & Waist Coat Length": "",
+    "Bandhi Length & Indowestern Length": "",
+    "Shirt Length & Kurta Length": "",
+    "Shoulder & Sleeve Length": "",
+    "Chest & Waist | Bicep & Cuff": "",
+    "Upper & Lower Chest": "",
+    "Length & Inseam": "",
+    "Waist & Seat":"",
+   "Thigh & Knee | Calf & Ankle":"",
+    "Fork Round": "",
   });
 
   const [file, setFile] = useState(null);
@@ -89,6 +93,7 @@ const EditComponent = () => {
     setToggle(id);
   };
 console.log(data,"data");
+ 
   return (
     <div className="container">
       <div className="d-flex justify-content-between">
@@ -101,22 +106,34 @@ console.log(data,"data");
       <div className="tab">
         <ul className="d-flex justify-content-between">
           <li className="list-prop" onClick={() => updateToggle(1)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
+            <Button
+              variant={toggle === 1 ? "dark" : "light"}
+              className="btnn-tab d-flex me-2 mt-5 "
+            >
               Info
             </Button>
           </li>
           <li className="list-prop" onClick={() => updateToggle(2)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
+            <Button
+              variant={toggle === 2 ? "dark" : "light"}
+              className="btnn-tab d-flex me-2 mt-5 "
+            >
               Shirt
             </Button>
           </li>
           <li className="list-prop" onClick={() => updateToggle(3)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
+            <Button
+              variant={toggle === 3 ? "dark" : "light"}
+              className="btnn-tab d-flex me-2 mt-5 "
+            >
               Suit
             </Button>
           </li>
           <li className="list-prop" onClick={() => updateToggle(4)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 ">
+            <Button
+              variant={toggle === 4 ? "dark" : "light"}
+              className="btnn-tab d-flex me-2 mt-5 "
+            >
               Trouser
             </Button>
           </li>
@@ -187,22 +204,67 @@ console.log(data,"data");
           </table>
         </div>
 
-        <div
-          className={toggle === 2 || toggle === 3 ? "show-content" : "content"}
-        >
+        <div className={toggle === 2 ? "show-content" : "content"}>
           <table className="table">
             <tbody>
               {[
-                "Suit Length",
-                "Waist Coat Length",
-                "Bandhi Length ",
-                "Indowestern Length",
-                "Shirt Length",
-                "Kurta Length",
+                {
+                  label: "Suit Length & Waist Coat Length",
+                  key: "Suit Length & Waist Coat Length suit",
+                },
+                {
+                  label: "Bandhi Length & Indowestern Length",
+                  key: "Bandhi Length & Indowestern Length suit",
+                },
+                {
+                  label: "Shirt Length & Kurta Length",
+                  key: "Shirt Length & Kurta Length suit",
+                },
+                {
+                  label: "Shoulder & Sleeve Length",
+                  key: "Shoulder & Sleeve Length suit",
+                },
+                {
+                  label: "Chest & Waist | Bicep & Cuff",
+                  key: "Chest & Waist | Bicep & Cuff suit",
+                },
+                {
+                  label: "Upper & Lower Chest",
+                  key: "Upper & Lower Chest suit",
+                },
+              ].map(({ label, key }) => (
+                <React.Fragment key={key}>
+                  <tr>
+                    <td className="border-0">
+                      <label className="fs-5">{label}</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        type="text"
+                        name={key}
+                        className="form-control transparent-input fs-5"
+                        value={data[key] || ""}
+                        onChange={handleChange}
+                      />
+                    </td>
+                  </tr>
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className={toggle === 3 ? "show-content" : "content"}>
+          <table className="table">
+            <tbody>
+              {[
+                "Suit Length & Waist Coat Length",
+                "Bandhi Length & Indowestern Length",
+                "Shirt Length & Kurta Length",
                 "Shoulder & Sleeve Length",
-                "Chest & Waist",
-                "Seat & Neck",
-                "Bicep&Cuff",
+                "Chest & Waist | Bicep & Cuff",
                 "Upper & Lower Chest",
               ].map((key) => (
                 <React.Fragment key={key}>
@@ -234,8 +296,7 @@ console.log(data,"data");
               {[
                 "Length & Inseam",
                 "Waist & Seat",
-                "Thigh & Knee",
-                "Calf & Ankle",
+                "Thigh & Knee | Calf & Ankle",
                 "Fork Round",
               ].map((key) => (
                 <React.Fragment key={key}>

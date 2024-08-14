@@ -68,39 +68,91 @@ console.log(data,"data")
       <div>
         <ul className="d-flex justify-content-between">
           <li className="list-prop" onClick={() => updateToggle(1)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 fs-4">
+            <Button
+              variant={toggle === 1 ? "dark" : "light"}
+              className="btnn-tab d-flex me-2 mt-5 fs-4"
+            >
               {" "}
               Suit
             </Button>
           </li>
           <li className=" list-prop" onClick={() => updateToggle(2)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 fs-4">
+            <Button
+              variant={toggle === 2 ? "dark" : "light"}
+              className="btnn-tab d-flex me-2 mt-5 fs-4"
+            >
               Shirt
             </Button>
           </li>
           <li className="list-prop" onClick={() => updateToggle(3)}>
-            <Button variant="dark" className="btnn-tab d-flex me-2 mt-5 fs-4">
+            <Button
+              variant={toggle === 3 ? "dark" : "light"}
+              className="btnn-tab d-flex me-2 mt-5 fs-4"
+            >
               Trouser
             </Button>
           </li>
         </ul>
       </div>
-      <div
-        className={toggle === 1 || toggle === 2 ? "show-content" : "content"}
-      >
+      <div className={toggle === 1 ? "show-content" : "content"}>
         <table className="table">
           <tbody>
             {[
-              "Suit Length",
-              "Waist Coat Length",
-              "Bandhi Length ",
-              "Indowestern Length",
-              "Shirt Length",
-              "Kurta Length",
+              {
+                label: "Suit Length & Waist Coat Length",
+                key: "Suit Length & Waist Coat Length",
+              },
+              {
+                label: "Bandhi Length & Indowestern Length",
+                key: "Bandhi Length & Indowestern Length suit",
+              },
+              {
+                label: "Shirt Length & Kurta Length",
+                key: "Shirt Length & Kurta Length suit",
+              },
+              {
+                label: "Shoulder & Sleeve Length",
+                key: "Shoulder & Sleeve Length suit",
+              },
+              {
+                label: "Chest & Waist | Bicep & Cuff",
+                key: "Chest & Waist | Bicep & Cuff suit",
+              },
+              {
+                label: "Upper & Lower Chest",
+                key: "Upper & Lower Chest suit",
+              },
+              {
+                label: "Comments",
+                key: "Comments",
+              },
+            ].map(({ label, key }) => (
+              <React.Fragment key={key}>
+                <tr>
+                  <td className="border-0">
+                    {/* <label className="fs-5">{label}</label> */}
+                    <th className="fs-5">{label}</th>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="transparent-input fs-5">
+                    {data[key] || "N/A"}
+                  </td>
+                </tr>
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className={toggle === 2 ? "show-content" : "content"}>
+        <table className="table">
+          <tbody>
+            {[
+              "Suit Length & Waist Coat Length",
+              "Bandhi Length & Indowestern Length",
+              "Shirt Length & Kurta Length",
               "Shoulder & Sleeve Length",
-              "Chest & Waist",
-              "Seat & Neck",
-              "Bicep&Cuff",
+              "Chest & Waist | Bicep & Cuff",
               "Upper & Lower Chest",
               "Comments",
             ].map((key) => (
@@ -124,8 +176,7 @@ console.log(data,"data")
             {[
               "Length & Inseam",
               "Waist & Seat",
-              "Thigh & Knee",
-              "Calf & Ankle",
+              "Thigh & Knee | Calf & Ankle",
               "Fork Round",
               "Comments",
             ].map((key) => (
