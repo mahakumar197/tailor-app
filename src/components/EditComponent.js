@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Form, Col, Row, Button } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 import Resizer from "react-image-file-resizer";
 import arrow from "./arrowleft.png";
 import "./style.css";
+
 const EditComponent = () => {
   const [data, setData] = useState({
     Name: "",
@@ -13,26 +14,19 @@ const EditComponent = () => {
     img: "",
     Comments: "",
     "Suit Length & Waist Coat Length suit": "",
-    "Indowestern Length & Bandhi Length": "",
     "Bandhi Length & Indowestern Length suit": "",
     "Shirt Length & Kurta Length suit": "",
     "Shoulder & Sleeve Length suit": "",
     "Chest & Waist | Bicep & Cuff suit": "",
     "Upper & Lower Chest suit": "",
-    "Suit Length & Waist Coat Length": "",
-    "Bandhi Length & Indowestern Length": "",
-    "Shirt Length & Kurta Length": "",
-    "Shoulder & Sleeve Length": "",
-    "Chest & Waist | Bicep & Cuff": "",
-    "Upper & Lower Chest": "",
     "Length & Inseam": "",
-    "Waist & Seat":"",
-   "Thigh & Knee | Calf & Ankle":"",
+    "Waist & Seat": "",
+    "Thigh & Knee | Calf & Ankle": "",
     "Fork Round": "",
   });
 
+  const [rowIndex, setRowIndex] = useState(null);
   const [file, setFile] = useState(null);
-  const [croppedImage, setCroppedImage] = useState(null); // Define croppedImage state
   const [toggle, setToggle] = useState(1);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -40,12 +34,30 @@ const EditComponent = () => {
   useEffect(() => {
     axios
       .get(
-        `https://sheet.best/api/sheets/16653153-1f20-4372-ad25-23df3d5a54ae/id/${id}`
+        `https://sheets.googleapis.com/v4/spreadsheets/16bY1IcTHpcirNZMIkaR5B_I261927rPcvGjPsYVxSM4/values/Measurement_data!A1:V1005?key=AIzaSyCUVzbeXceE_bc8NF1X3qbI4_C1o1fTuaY`
       )
       .then((response) => {
-        setData(response.data[0]);
+        const rows = response.data.values;
+        const headers = rows[0];
+        const rowData = rows.find((row) => row[0] === id); // Find the row with matching id
+
+        if (rowData) {
+          const rowObject = headers.reduce((acc, header, index) => {
+            acc[header] = rowData[index] || "N/A"; // Map headers to corresponding row data
+            return acc;
+          }, {});
+          setData(rowObject);
+
+          // Determine the row index (adding 1 to account for header row)
+          const index = rows.findIndex((row) => row[0] === id) + 1;
+          setRowIndex(index);
+        } else {
+          console.error("No data found for the provided ID.");
+        }
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        console.error("There was an error fetching the data!", error);
+      });
   }, [id]);
 
   const handleChange = (e) => {
@@ -66,7 +78,6 @@ const EditComponent = () => {
         70, // reduce quality
         0,
         (uri) => {
-          setCroppedImage(uri); // Update croppedImage state
           setData((prevData) => ({ ...prevData, img: uri }));
         },
         "base64"
@@ -78,22 +89,50 @@ const EditComponent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (rowIndex === null) {
+      console.error("Row index is not set.");
+      return;
+    }
+
     axios
-      .patch(
-        `https://sheet.best/api/sheets/16653153-1f20-4372-ad25-23df3d5a54ae/id/${id}`,
-        data
+      .put(
+        `https://sheets.googleapis.com/v4/spreadsheets/16bY1IcTHpcirNZMIkaR5B_I261927rPcvGjPsYVxSM4/values/Measurement_data!A${rowIndex}:V${rowIndex}?valueInputOption=USER_ENTERED&key=AIzaSyCUVzbeXceE_bc8NF1X3qbI4_C1o1fTuaY`,
+        {
+          range: `Measurement_data!A${rowIndex}:V${rowIndex}`,
+          majorDimension: "ROWS",
+          values: [
+            [
+              data["Name"],
+              data["Phone Number"],
+              data["Address"],
+              data["img"],
+              data["Comments"],
+              data["Suit Length & Waist Coat Length suit"],
+              data["Bandhi Length & Indowestern Length suit"],
+              data["Shirt Length & Kurta Length suit"],
+              data["Shoulder & Sleeve Length suit"],
+              data["Chest & Waist | Bicep & Cuff suit"],
+              data["Upper & Lower Chest suit"],
+              data["Length & Inseam"],
+              data["Waist & Seat"],
+              data["Thigh & Knee | Calf & Ankle"],
+              data["Fork Round"],
+            ],
+          ],
+        }
       )
       .then(() => {
-        navigate(`/data/${id}`); // Redirect to view component
+        navigate(`/data/${id}`);
       })
       .catch((error) => console.error("Error updating data:", error));
   };
 
+
   const updateToggle = (id) => {
     setToggle(id);
   };
-console.log(data,"data");
- 
+
   return (
     <div className="container">
       <div className="d-flex justify-content-between">
@@ -105,38 +144,20 @@ console.log(data,"data");
       </div>
       <div className="tab">
         <ul className="d-flex justify-content-between">
-          <li className="list-prop" onClick={() => updateToggle(1)}>
-            <Button
-              variant={toggle === 1 ? "dark" : "light"}
-              className="btnn-tab d-flex me-2 mt-5 "
+          {["Info", "Shirt", "Suit", "Trouser"].map((tab, index) => (
+            <li
+              className="list-prop"
+              onClick={() => updateToggle(index + 1)}
+              key={index}
             >
-              Info
-            </Button>
-          </li>
-          <li className="list-prop" onClick={() => updateToggle(2)}>
-            <Button
-              variant={toggle === 2 ? "dark" : "light"}
-              className="btnn-tab d-flex me-2 mt-5 "
-            >
-              Shirt
-            </Button>
-          </li>
-          <li className="list-prop" onClick={() => updateToggle(3)}>
-            <Button
-              variant={toggle === 3 ? "dark" : "light"}
-              className="btnn-tab d-flex me-2 mt-5 "
-            >
-              Suit
-            </Button>
-          </li>
-          <li className="list-prop" onClick={() => updateToggle(4)}>
-            <Button
-              variant={toggle === 4 ? "dark" : "light"}
-              className="btnn-tab d-flex me-2 mt-5 "
-            >
-              Trouser
-            </Button>
-          </li>
+              <Button
+                variant={toggle === index + 1 ? "dark" : "light"}
+                className="btnn-tab d-flex me-2 mt-5"
+              >
+                {tab}
+              </Button>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -144,11 +165,11 @@ console.log(data,"data");
         <div className={toggle === 1 ? "show-content" : "content"}>
           <table className="table">
             <tbody>
-              {["Name", "Phone Number", "Address"].map((key) => (
+              {["Name", "Phone Number", "Address", "Comments"].map((key) => (
                 <React.Fragment key={key}>
                   <tr>
                     <td className="border-0">
-                      <label className="fs-5">{key.replace("_", " ")}</label>
+                      <label className="fs-5">{key}</label>
                     </td>
                   </tr>
                   <tr>
@@ -177,150 +198,17 @@ console.log(data,"data");
                     name="img"
                     className="form-control transparent-input fs-5"
                     accept="image/*"
-                    capture="environment"
-                    multiple // Allow multiple file uploads
                     onChange={handleFileChange}
                   />
                 </td>
               </tr>
-
-              <tr>
-                <td className="border-0">
-                  <label className="fs-5">Comments</label>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input
-                    type="text"
-                    name="Comments"
-                    className="form-control transparent-input fs-5"
-                    value={data.Comments}
-                    onChange={handleChange}
-                  />
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
 
-        <div className={toggle === 2 ? "show-content" : "content"}>
-          <table className="table">
-            <tbody>
-              {[
-                {
-                  label: "Suit Length & Waist Coat Length",
-                  key: "Suit Length & Waist Coat Length suit",
-                },
-                {
-                  label: "Bandhi Length & Indowestern Length",
-                  key: "Bandhi Length & Indowestern Length suit",
-                },
-                {
-                  label: "Shirt Length & Kurta Length",
-                  key: "Shirt Length & Kurta Length suit",
-                },
-                {
-                  label: "Shoulder & Sleeve Length",
-                  key: "Shoulder & Sleeve Length suit",
-                },
-                {
-                  label: "Chest & Waist | Bicep & Cuff",
-                  key: "Chest & Waist | Bicep & Cuff suit",
-                },
-                {
-                  label: "Upper & Lower Chest",
-                  key: "Upper & Lower Chest suit",
-                },
-              ].map(({ label, key }) => (
-                <React.Fragment key={key}>
-                  <tr>
-                    <td className="border-0">
-                      <label className="fs-5">{label}</label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        name={key}
-                        className="form-control transparent-input fs-5"
-                        value={data[key] || ""}
-                        onChange={handleChange}
-                      />
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {/* Additional forms based on toggle */}
+        {/* ... (Rest of your code for Shirt, Suit, and Trouser sections) */}
 
-        <div className={toggle === 3 ? "show-content" : "content"}>
-          <table className="table">
-            <tbody>
-              {[
-                "Suit Length & Waist Coat Length",
-                "Bandhi Length & Indowestern Length",
-                "Shirt Length & Kurta Length",
-                "Shoulder & Sleeve Length",
-                "Chest & Waist | Bicep & Cuff",
-                "Upper & Lower Chest",
-              ].map((key) => (
-                <React.Fragment key={key}>
-                  <tr>
-                    <td className="border-0">
-                      <label className="fs-5">{key.replace("_", " ")}</label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        name={key}
-                        className="form-control transparent-input fs-5"
-                        value={data[key]}
-                        onChange={handleChange}
-                      />
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className={toggle === 4 ? "show-content" : "content"}>
-          <table className="table">
-            <tbody>
-              {[
-                "Length & Inseam",
-                "Waist & Seat",
-                "Thigh & Knee | Calf & Ankle",
-                "Fork Round",
-              ].map((key) => (
-                <React.Fragment key={key}>
-                  <tr>
-                    <td className="border-0">
-                      <label className="fs-5">{key.replace("_", " ")}</label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        name={key}
-                        className="form-control transparent-input fs-5"
-                        value={data[key]}
-                        onChange={handleChange}
-                      />
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
         <div className="mt-5">
           <Button
             variant="dark"

@@ -20,18 +20,30 @@ function ViewComponent() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://sheet.best/api/sheets/16653153-1f20-4372-ad25-23df3d5a54ae`
+          `https://sheets.googleapis.com/v4/spreadsheets/16bY1IcTHpcirNZMIkaR5B_I261927rPcvGjPsYVxSM4/values/Measurement_data/?key=AIzaSyCUVzbeXceE_bc8NF1X3qbI4_C1o1fTuaY`
         );
-        setData(response.data);
-        console.log(response.data,"dsts")
-        setFilteredData(response.data);
+
+        // Extract headers and rows
+        const [headers, ...rows] = response.data.values;
+
+        // Map rows to objects based on headers
+        const formattedData = rows.map((row) => {
+          const item = {};
+          headers.forEach((header, index) => {
+            item[header] = row[index] || ""; // Handle missing values
+          });
+          return item;
+        });
+
+        setData(formattedData);
+        setFilteredData(formattedData);
       } catch (error) {
         console.error("There was an error fetching the data!", error);
       }
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures this runs only once
+  }, []);
 
   // Set greeting message based on the time of day
   useEffect(() => {
@@ -43,15 +55,12 @@ function ViewComponent() {
     } else {
       setGreeting("Good Evening");
     }
-
-   
   }, [navigate]);
 
   // Debounce the search input
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {
-        console.log("Data:", data); // Inspect the data structure
         const results = data.filter((item) => {
           const name = item.Name ? item.Name.toLowerCase() : "";
           const phoneNumber = item["Phone Number"] ? item["Phone Number"] : "";
@@ -65,7 +74,6 @@ function ViewComponent() {
     [data]
   );
 
-
   const handleSearchChange = (e) => {
     const { value } = e.target;
     setSearchTerm(value);
@@ -76,10 +84,6 @@ function ViewComponent() {
     <div className="container pt-5">
       <div className="d-flex header-content justify-content-between">
         <h1 className="header1-prop">{greeting}</h1>
-        {/* <div className="d-flex">
-          <img src={Heart} className="me-3 img-heart" alt="fav" />
-          <p className="show-fav">Show Favourites</p>
-        </div> */}
       </div>
       <div className="pt-4">
         <h5 className="my-4 header3-prop fw-medium">Search Customer</h5>
@@ -109,7 +113,7 @@ function ViewComponent() {
                 <div className="col-2">
                   <img
                     src={item.img || profile}
-                    // alt={Heart}
+                    alt="profile"
                     className="img-rounded"
                   />
                 </div>
